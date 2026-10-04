@@ -78,7 +78,7 @@ npm run serve:web     # ทดสอบในเครื่องที่ http
 แล้วเอาโฟลเดอร์ `web/` ขึ้นโฮสต์ฟรีที่มี HTTPS
 
 - **ถ้าโค้ดอยู่ใน GitHub แล้ว** (repo นี้): Settings → Pages → Source: **GitHub Actions** ครั้งเดียว
-  workflow ที่เตรียมไว้จะประกอบและเผยแพร่ให้เองทุกครั้งที่ push → ได้ URL `https://ohojames.github.io/ai-translate/`
+  workflow ที่เตรียมไว้จะประกอบและเผยแพร่ให้เองทุกครั้งที่ push → ได้ URL `https://openlinkthailand-art.github.io/ai-translate/`
 - **ถ้าอยากเร็วสุด**: ลากโฟลเดอร์ `web/` ไปวางที่ Netlify Drop → ได้ HTTPS URL ทันที
 
 จากนั้นเปิดด้วย Chrome on Android → เมนู ⋮ → **ติดตั้งแอป**
@@ -329,28 +329,25 @@ npm run package    # แพ็ก ZIP ทั้งส่วนขยายแล
 
 ### นำโค้ดขึ้น GitHub (repo นี้เตรียมไว้ให้แล้ว)
 
-remote ตั้งไว้ที่ `https://github.com/ohojames/ai-translate` และมีสคริปต์ที่ทำทุกอย่างให้ในคำสั่งเดียว
+remote ตั้งไว้ที่ `https://github.com/openlinkthailand-art/ai-translate` และมีสคริปต์ที่ทำทุกอย่างให้ในคำสั่งเดียว
 (ตรวจบัญชีของโทเคน → สร้าง repo ถ้ายังไม่มี → push → เปิด GitHub Pages → สั่งรัน workflow เผยแพร่แอปมือถือ)
 
 ```bash
-GITHUB_TOKEN=<โทเคนของบัญชี ohojames> npm run push
+GH_TOKEN=$(gh auth token) npm run push
 ```
 
 ถ้าล็อกอิน gh ไว้หลายบัญชี ใช้แบบนี้ได้โดยไม่ต้องคัดลอกโทเคน:
 
 ```bash
-gh auth login                                    # เข้าสู่ระบบเป็น ohojames (ทำครั้งเดียว)
-GH_TOKEN=$(gh auth token --user ohojames) npm run push
+gh auth login    # ทำครั้งเดียว ถ้ายังไม่เคยล็อกอิน
 ```
 
-บน PowerShell: `$env:GH_TOKEN = gh auth token --user ohojames; npm run push`
+บน PowerShell: `$env:GH_TOKEN = gh auth token; npm run push`
 
-> **หมายเหตุของเครื่องนี้:** `git config` และ `gh` ตั้งไว้เป็นบัญชี `openlinkthailand-art`
-> ซึ่งไม่มีสิทธิ์ใน repo ของ `ohojames` จึงต้องใช้โทเคน/การล็อกอินของ `ohojames` เท่านั้น
-> โทเคนที่ต้องใช้: classic PAT สิทธิ์ `repo` หรือ fine-grained ที่ให้ Contents (Read and write),
-> Administration (Read and write) และ Pages (Read and write)
+> **หมายเหตุ:** สคริปต์ดึงโทเคนจาก `gh auth token` (บัญชีที่ล็อกอินไว้ในเครื่อง) จึงไม่ต้องคัดลอกโทเคนเอง
+> ถ้าใช้ PAT เอง ต้องมีสิทธิ์ `repo` และ `workflow` (ต้องมี `workflow` เพราะ repo นี้มีไฟล์ใน `.github/workflows/`)
 
-หลัง push สำเร็จ แอปมือถือจะอยู่ที่ `https://ohojames.github.io/ai-translate/` (ใช้เวลาประกอบประมาณ 1 นาที)
+หลัง push สำเร็จ แอปมือถือจะอยู่ที่ `https://openlinkthailand-art.github.io/ai-translate/` (ใช้เวลาประกอบประมาณ 1 นาที)
 
 โครงสร้างโปรเจกต์และสถาปัตยกรรมอยู่ใน [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 แผนการพัฒนาและสิ่งที่ทำแล้ว/ต่อไปอยู่ใน [`docs/PLAN.md`](docs/PLAN.md)

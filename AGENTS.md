@@ -10,7 +10,7 @@
 - **สองแอปจากโค้ดชุดเดียว:**
   - `extension/` — ส่วนขยาย Chrome/Edge (ดับเบิลคลิกคำบนหน้าเว็บ, เปิด PDF ในโหมดอ่านแปล)
   - `web/` — เว็บแอป/PWA สำหรับ Android (ติดตั้งลงหน้าจอโฮม + รับข้อความผ่าน Share Sheet)
-- **Remote:** https://github.com/ohojames/ai-translate (บัญชี GitHub: `ohojames`, อีเมล `ohojames@gmail.com`)
+- **Remote:** https://github.com/openlinkthailand-art/ai-translate (บัญชี GitHub: `openlinkthailand-art`, อีเมล `openlinkthailand@gmail.com`)
 - **สาขาหลัก:** `main`
 - **เวอร์ชันปัจจุบัน:** ดูที่ `extension/manifest.json` (เป็นแหล่งความจริงเดียวของเวอร์ชัน)
 
@@ -66,18 +66,16 @@ viewer/viewer.js     ← ตัวอ่าน PDF (pdf.js) ใช้ร่ว�
 ## การ push ขึ้น GitHub
 
 ```bash
-GITHUB_TOKEN=<โทเคนของบัญชี ohojames> npm run push
-# หรือระบุ repo เอง: GITHUB_TOKEN=xxx node scripts/push-github.mjs owner/repo
+GH_TOKEN=$(gh auth token) npm run push
+# หรือระบุ repo เอง: GH_TOKEN=xxx node scripts/push-github.mjs owner/repo
 ```
 
-- สคริปต์จะตรวจบัญชีของโทเคน → สร้าง repo ถ้ายังไม่มี → push ขึ้น `main` → ไม่บันทึกโทเคนลง git config
-- **ข้อควรระวังของเครื่องนี้:** `git config` และ `gh` ตั้งไว้เป็นบัญชี **`openlinkthailand-art`**
-  ซึ่งไม่มีสิทธิ์ใน repo ของ `ohojames` (ทดสอบแล้วได้ "Repository not found")
-  จึงต้องใช้โทเคนของบัญชี `ohojames` เท่านั้นในการ push
-- โทเคนที่ต้องใช้: classic PAT สิทธิ์ `repo` (หรือ fine-grained: Contents = Read and write
-  และ Administration = Read and write ถ้าต้องการให้สร้าง repo ให้)
+- สคริปต์จะตรวจบัญชีของโทเคน → สร้าง repo ถ้ายังไม่มี → push ขึ้น `main` → เปิด GitHub Pages
+  → สั่งรัน workflow เผยแพร่แอปมือถือ (ถ้าสิทธิ์ไม่พอจะพิมพ์ขั้นตอนที่ต้องกดเอง) → ไม่บันทึกโทเคนลง git config
+- **บัญชีที่ใช้:** `openlinkthailand-art` (`openlinkthailand@gmail.com`) ซึ่งเป็นบัญชีที่ `gh` ล็อกอินไว้ในเครื่องนี้
+  มี scope `repo` + `workflow` ครบ (ต้องมี workflow เพราะ repo นี้มีไฟล์ใน `.github/workflows/`)
+- git author ตั้งไว้เป็นบัญชีนี้แล้ว (`git config user.name` / `user.email`)
 - หลัง push แล้วให้เปิด GitHub Pages: Settings → Pages → Source: **GitHub Actions**
-
 ## การ deploy แอปมือถือ
 
 `web/` เป็นไฟล์นิ่งทั้งหมด วางบนโฮสต์ที่มี HTTPS ได้เลย

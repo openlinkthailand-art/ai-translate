@@ -22,7 +22,7 @@
 2. หัวข้อ **Build and deployment → Source** เลือก **GitHub Actions** แล้วกด Save
 3. ไปที่แท็บ **Actions** → เลือก workflow "Deploy mobile app (PWA) to GitHub Pages" → **Run workflow**
    (หรือ push โค้ดใหม่ก็จะทำงานเอง)
-4. รอประมาณ 1 นาที จะได้ URL `https://ohojames.github.io/ai-translate/`
+4. รอประมาณ 1 นาที จะได้ URL `https://openlinkthailand-art.github.io/ai-translate/`
 
 ข้อดี: อัปเดตแอปได้ตลอดด้วยการ push โค้ด ไม่ต้องอัปโหลดไฟล์เอง และเว็บที่เผยแพร่ตรงกับโค้ดต้นฉบับเสมอ
 

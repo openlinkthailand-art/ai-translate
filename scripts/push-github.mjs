@@ -3,7 +3,7 @@
  *
  * วิธีใช้:
  *   GITHUB_TOKEN=ghp_xxx node scripts/push-github.mjs
- *   GITHUB_TOKEN=ghp_xxx node scripts/push-github.mjs ohojames/ai-translate
+ *   GITHUB_TOKEN=ghp_xxx node scripts/push-github.mjs openlinkthailand-art/ai-translate
  *
  * สคริปต์จะ
  *   1) ตรวจว่าโทเคนเป็นของบัญชีใด
@@ -18,7 +18,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || '';
-const target = process.argv[2] || 'ohojames/ai-translate';
+const target = process.argv[2] || 'openlinkthailand-art/ai-translate';
 
 /** ใช้ throw แทน process.exit เพื่อให้ event loop ปิดตัวเองสะอาด */
 class Stop extends Error {}
@@ -60,7 +60,7 @@ async function main() {
   }
 
   const [owner, repo] = target.split('/');
-  if (!owner || !repo) fail(`รูปแบบ repo ไม่ถูกต้อง: ${target}`, 'ต้องเป็น owner/repo เช่น ohojames/ai-translate');
+  if (!owner || !repo) fail(`รูปแบบ repo ไม่ถูกต้อง: ${target}`, 'ต้องเป็น owner/repo เช่น openlinkthailand-art/ai-translate');
 
   if (!fs.existsSync(path.join(root, '.git'))) fail('ยังไม่ได้ git init ในโปรเจกต์นี้');
 
