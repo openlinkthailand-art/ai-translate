@@ -63,6 +63,21 @@ viewer/viewer.js     ← ตัวอ่าน PDF (pdf.js) ใช้ร่ว�
 
 รายละเอียดเต็มอยู่ใน `docs/ARCHITECTURE.md`, แผนงานใน `docs/PLAN.md`, คู่มือมือถือใน `docs/MOBILE.md`
 
+## การ push ขึ้น GitHub
+
+```bash
+GITHUB_TOKEN=<โทเคนของบัญชี ohojames> npm run push
+# หรือระบุ repo เอง: GITHUB_TOKEN=xxx node scripts/push-github.mjs owner/repo
+```
+
+- สคริปต์จะตรวจบัญชีของโทเคน → สร้าง repo ถ้ายังไม่มี → push ขึ้น `main` → ไม่บันทึกโทเคนลง git config
+- **ข้อควรระวังของเครื่องนี้:** `git config` และ `gh` ตั้งไว้เป็นบัญชี **`openlinkthailand-art`**
+  ซึ่งไม่มีสิทธิ์ใน repo ของ `ohojames` (ทดสอบแล้วได้ "Repository not found")
+  จึงต้องใช้โทเคนของบัญชี `ohojames` เท่านั้นในการ push
+- โทเคนที่ต้องใช้: classic PAT สิทธิ์ `repo` (หรือ fine-grained: Contents = Read and write
+  และ Administration = Read and write ถ้าต้องการให้สร้าง repo ให้)
+- หลัง push แล้วให้เปิด GitHub Pages: Settings → Pages → Source: **GitHub Actions**
+
 ## การ deploy แอปมือถือ
 
 `web/` เป็นไฟล์นิ่งทั้งหมด วางบนโฮสต์ที่มี HTTPS ได้เลย

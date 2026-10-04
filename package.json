@@ -16,7 +16,8 @@
     "e2e:web": "node scripts/web-e2e.mjs",
     "test": "node scripts/check-js.mjs && node scripts/build-web.mjs && node scripts/smoke-test.mjs",
     "verify": "node scripts/check-js.mjs && node scripts/build-web.mjs && node scripts/smoke-test.mjs && node scripts/make-test-pdf.mjs && node scripts/e2e-test.mjs && node scripts/web-e2e.mjs",
-    "package": "node scripts/package.mjs && node scripts/package-web.mjs"
+    "package": "node scripts/package.mjs && node scripts/package-web.mjs",
+    "push": "node scripts/push-github.mjs"
   },
   "license": "MIT",
   "devDependencies": {
