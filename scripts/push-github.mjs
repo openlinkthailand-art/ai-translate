@@ -116,14 +116,27 @@ async function main() {
   console.log(`กำลัง push สาขา ${branch} (${commitCount} commit) ขึ้น ${owner}/${repo} …`);
 
   const pushUrl = `https://x-access-token:${token}@github.com/${owner}/${repo}.git`;
+  const env = { ...process.env, GIT_TERMINAL_PROMPT: '0' };
+  const runPush = (extra = []) => git(['push', pushUrl, `${branch}:main`, ...extra], { env });
+
   try {
-    const out = git(['push', pushUrl, `${branch}:main`, '--force-with-lease'], {
-      env: { ...process.env, GIT_TERMINAL_PROMPT: '0' },
-    });
+    const out = runPush();
     console.log(out.trim() || '  ✓ push สำเร็จ');
   } catch (err) {
-    const msg = `${err.stderr || ''}${err.stdout || ''}`.replace(token, '***');
-    fail('push ไม่สำเร็จ', msg.split('\n').slice(0, 6).join('\n  '));
+    const first = `${err.stderr || ''}${err.stdout || ''}`;
+    // repo ที่มีประวัติอยู่ก่อน (เช่นสร้างพร้อม README) จะถูกปฏิเสธ — ลองทับด้วย --force-with-lease
+    if (/rejected|non-fast-forward|fetch first/i.test(first)) {
+      console.log('  ! ปลายทางมีประวัติอยู่ก่อน กำลัง push ทับด้วย --force-with-lease …');
+      try {
+        const out = runPush(['--force-with-lease']);
+        console.log(out.trim() || '  ✓ push สำเร็จ');
+      } catch (err2) {
+        const msg = `${err2.stderr || ''}${err2.stdout || ''}`.replace(token, '***');
+        fail('push ไม่สำเร็จ', msg.split('\n').slice(0, 6).join('\n  '));
+      }
+    } else {
+      fail('push ไม่สำเร็จ', first.replace(token, '***').split('\n').slice(0, 6).join('\n  '));
+    }
   }
 
   /* 4) ตั้ง remote ให้เป็น URL ปกติ (ไม่มีโทเคน) */
@@ -135,13 +148,60 @@ async function main() {
     /* ไม่สำคัญ */
   }
 
-  console.log('\n✓ เสร็จแล้ว');
+  console.log('\n✓ push สำเร็จ');
   console.log(`  โค้ด: https://github.com/${owner}/${repo}`);
-  console.log('\nขั้นต่อไป — เปิดแอปมือถือให้ใช้ได้:');
-  console.log(`  1. ไปที่ https://github.com/${owner}/${repo}/settings/pages`);
-  console.log('  2. Build and deployment → Source: เลือก "GitHub Actions" แล้ว Save');
-  console.log(`  3. แท็บ Actions → รัน workflow "Deploy mobile app (PWA) to GitHub Pages"`);
-  console.log(`  4. เปิดแอปที่ https://${owner.toLowerCase()}.github.io/${repo}/ ด้วย Chrome on Android แล้วกด "ติดตั้งแอป"`);
+
+  /* 5) เปิด GitHub Pages ให้ และสั่งรัน workflow เพื่อให้แอปมือถือออนไลน์ทันที */
+  const siteUrl = `https://${owner.toLowerCase()}.github.io/${repo}/`;
+  let pagesReady = false;
+  try {
+    const pages = await api(`/repos/${owner}/${repo}/pages`);
+    if (pages.ok) {
+      pagesReady = true;
+      console.log(`  ✓ GitHub Pages เปิดอยู่แล้ว: ${pages.json.html_url || siteUrl}`);
+    } else if (pages.status === 404) {
+      const created = await api(`/repos/${owner}/${repo}/pages`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ build_type: 'workflow' }),
+      });
+      if (created.ok || created.status === 409) {
+        pagesReady = true;
+        console.log('  ✓ เปิด GitHub Pages (โหมด GitHub Actions) แล้ว');
+      } else {
+        console.log(`  ! เปิด Pages อัตโนมัติไม่ได้ (HTTP ${created.status}) — เปิดเองที่ Settings → Pages`);
+      }
+    } else {
+      console.log(`  ! ตรวจสถานะ Pages ไม่ได้ (HTTP ${pages.status})`);
+    }
+  } catch (err) {
+    console.log(`  ! เปิด Pages อัตโนมัติไม่สำเร็จ: ${err.message}`);
+  }
+
+  if (pagesReady) {
+    try {
+      const dispatched = await api(`/repos/${owner}/${repo}/actions/workflows/pages.yml/dispatches`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ref: 'main' }),
+      });
+      if (dispatched.status === 204) {
+        console.log('  ✓ สั่งรัน workflow ประกอบและเผยแพร่แอปมือถือแล้ว (ใช้เวลาประมาณ 1 นาที)');
+      } else {
+        console.log(`  ! สั่งรัน workflow ไม่ได้ (HTTP ${dispatched.status}) — กด Run workflow เองในแท็บ Actions`);
+      }
+    } catch (err) {
+      console.log(`  ! สั่งรัน workflow ไม่สำเร็จ: ${err.message}`);
+    }
+  }
+
+  console.log('\nเสร็จแล้ว — ขั้นต่อไป:');
+  console.log(`  1. เปิดแอปมือถือที่ ${siteUrl} ด้วย Chrome on Android`);
+  console.log('  2. เมนู ⋮ → "ติดตั้งแอป" (หรือ "เพิ่มลงในหน้าจอหลัก")');
+  console.log('  3. ทดสอบ: เลือกข้อความในแอปใดก็ได้ → แชร์ → อ่านไทย');
+  if (!pagesReady) {
+    console.log(`\n  (ถ้ายังไม่เห็นแอป ให้เปิด Pages เองที่ https://github.com/${owner}/${repo}/settings/pages → Source: GitHub Actions)`);
+  }
 }
 
 main().catch((err) => {

@@ -327,6 +327,31 @@ npm run package    # แพ็ก ZIP ทั้งส่วนขยายแล
 ต้องติดตั้ง `playwright` (dev dependency) สำหรับ `npm run e2e` / `npm run e2e:web`
 ถ้าเบราว์เซอร์ยังไม่มีให้รัน `npx playwright install chromium`
 
+### นำโค้ดขึ้น GitHub (repo นี้เตรียมไว้ให้แล้ว)
+
+remote ตั้งไว้ที่ `https://github.com/ohojames/ai-translate` และมีสคริปต์ที่ทำทุกอย่างให้ในคำสั่งเดียว
+(ตรวจบัญชีของโทเคน → สร้าง repo ถ้ายังไม่มี → push → เปิด GitHub Pages → สั่งรัน workflow เผยแพร่แอปมือถือ)
+
+```bash
+GITHUB_TOKEN=<โทเคนของบัญชี ohojames> npm run push
+```
+
+ถ้าล็อกอิน gh ไว้หลายบัญชี ใช้แบบนี้ได้โดยไม่ต้องคัดลอกโทเคน:
+
+```bash
+gh auth login                                    # เข้าสู่ระบบเป็น ohojames (ทำครั้งเดียว)
+GH_TOKEN=$(gh auth token --user ohojames) npm run push
+```
+
+บน PowerShell: `$env:GH_TOKEN = gh auth token --user ohojames; npm run push`
+
+> **หมายเหตุของเครื่องนี้:** `git config` และ `gh` ตั้งไว้เป็นบัญชี `openlinkthailand-art`
+> ซึ่งไม่มีสิทธิ์ใน repo ของ `ohojames` จึงต้องใช้โทเคน/การล็อกอินของ `ohojames` เท่านั้น
+> โทเคนที่ต้องใช้: classic PAT สิทธิ์ `repo` หรือ fine-grained ที่ให้ Contents (Read and write),
+> Administration (Read and write) และ Pages (Read and write)
+
+หลัง push สำเร็จ แอปมือถือจะอยู่ที่ `https://ohojames.github.io/ai-translate/` (ใช้เวลาประกอบประมาณ 1 นาที)
+
 โครงสร้างโปรเจกต์และสถาปัตยกรรมอยู่ใน [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 แผนการพัฒนาและสิ่งที่ทำแล้ว/ต่อไปอยู่ใน [`docs/PLAN.md`](docs/PLAN.md)
 คู่มือมือถืออยู่ใน [`docs/MOBILE.md`](docs/MOBILE.md)
