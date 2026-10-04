@@ -6,6 +6,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
+import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -128,16 +129,35 @@ if (fs.existsSync(webManifestPath)) {
 const buildInfoPath = path.join(root, 'web', 'build-info.json');
 if (fs.existsSync(buildInfoPath)) {
   try {
+    const { expectedHash } = await import('./lib/transform.mjs');
     const info = JSON.parse(fs.readFileSync(buildInfoPath, 'utf8'));
-    const stale = Object.entries(info.files || {}).filter(([, v]) => v.src !== v.copy).map(([k]) => k);
+    const stale = [];
+    for (const rel of Object.keys(info.files || {})) {
+      const copyFile = path.join(root, 'web', 'src', rel);
+      const srcFile = path.join(root, 'extension', 'src', rel);
+      if (!fs.existsSync(copyFile)) {
+        stale.push(`${rel} (ไม่มีไฟล์ปลายทาง)`);
+        continue;
+      }
+      if (!fs.existsSync(srcFile)) {
+        stale.push(`${rel} (ไม่มีไฟล์ต้นฉบับ)`);
+        continue;
+      }
+      // คำนวณค่าที่ควรจะเป็นจาก "ต้นฉบับปัจจุบัน" เสมอ
+      // จึงจับได้ทั้งการแก้ไฟล์ปลายทางโดยตรง และการแก้ต้นฉบับแล้วลืม build
+      const expected = expectedHash(fs.readFileSync(srcFile, 'utf8'), rel);
+      const copyHash = crypto.createHash('sha1').update(fs.readFileSync(copyFile)).digest('hex').slice(0, 12);
+      if (copyHash !== expected) stale.push(rel);
+    }
     if (stale.length) {
       failed++;
       console.error(`✗ web/src ค้างเก่า ${stale.length} ไฟล์ (รัน npm run build:web): ${stale.slice(0, 4).join(', ')}`);
     } else {
       console.log(`✓ web/src ตรงกับต้นฉบับใน extension/src (${Object.keys(info.files || {}).length} ไฟล์)`);
     }
-  } catch {
-    /* ไม่มี build-info ก็ข้าม */
+  } catch (err) {
+    failed++;
+    console.error(`✗ ตรวจความสอดคล้องของ web/src ไม่ได้: ${err.message}`);
   }
 }
 

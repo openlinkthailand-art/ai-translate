@@ -279,7 +279,12 @@ try {
     const info = await pdfPage.evaluate(() => ({
       pages: document.querySelectorAll('.page').length,
       spans: document.querySelectorAll('.textLayer span').length,
-      text: (document.querySelector('.textLayer')?.textContent || '').slice(0, 80),
+      // รวมข้อความจากทุกชั้นข้อความ (หน้าที่ยังไม่ถูกเรนเดอร์จะว่าง)
+      text: [...document.querySelectorAll('.textLayer')]
+        .map((n) => n.textContent)
+        .join(' ')
+        .trim()
+        .slice(0, 120),
       total: document.getElementById('page-total')?.textContent,
     }));
     check('เรนเดอร์หน้า PDF ได้ (canvas + text layer)', rendered, `หน้า: ${info.total}, span: ${info.spans}`);

@@ -10,6 +10,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { writeWebIcons } from './make-icons.mjs';
+import { transformHtml, transformIdFor, fileHash } from './lib/transform.mjs';
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const extDir = path.join(root, 'extension');
@@ -44,16 +45,22 @@ fs.mkdirSync(webSrc, { recursive: true });
 /* 2) คัดลอกโค้ดที่ใช้ร่วมกัน                                            */
 /* ------------------------------------------------------------------ */
 
-function copyDir(from, to, { skip = () => false } = {}) {
+function copyDir(from, to, { skip = () => false, base = '' } = {}) {
   fs.mkdirSync(to, { recursive: true });
   let count = 0;
   for (const entry of fs.readdirSync(from, { withFileTypes: true })) {
     const src = path.join(from, entry.name);
     const dst = path.join(to, entry.name);
+    const rel = base ? `${base}/${entry.name}` : entry.name;
     if (skip(entry.name, src)) continue;
-    if (entry.isDirectory()) count += copyDir(src, dst, { skip });
+    if (entry.isDirectory()) count += copyDir(src, dst, { skip, base: rel });
     else {
-      fs.copyFileSync(src, dst);
+      // ไฟล์ .html ถูกแปลงเล็กน้อย (เติมลิงก์ไอคอน) — ดู scripts/lib/transform.mjs
+      if (transformIdFor(rel)) {
+        fs.writeFileSync(dst, transformHtml(fs.readFileSync(src, 'utf8'), rel), 'utf8');
+      } else {
+        fs.copyFileSync(src, dst);
+      }
       count += 1;
     }
   }
@@ -64,7 +71,9 @@ let copied = 0;
 for (const dir of SHARED) {
   const from = path.join(extDir, 'src', dir);
   if (!fs.existsSync(from)) continue;
+  // base เริ่มที่ชื่อโฟลเดอร์ เพื่อให้ rel ตรงกับคีย์ใน build-info.json (เช่น 'viewer/viewer.html')
   copied += copyDir(from, path.join(webSrc, dir), {
+    base: dir,
     skip: (name) => name === 'config.js' || name === 'popup.html' || name === 'popup.js',
   });
 }
@@ -133,22 +142,33 @@ fs.writeFileSync(
 /* 6) build-info.json สำหรับตรวจว่า build ค้างเก่าหรือไม่                 */
 /* ------------------------------------------------------------------ */
 
-const hash = (file) => crypto.createHash('sha1').update(fs.readFileSync(file)).digest('hex').slice(0, 12);
+const hash = (file) => fileHash(fs.readFileSync(file));
 const sources = {};
 for (const dir of SHARED) {
   const from = path.join(extDir, 'src', dir);
   if (!fs.existsSync(from)) continue;
   for (const rel of walk(from)) {
     if (rel === 'config.js') continue;
+    const fullRel = `${dir}/${rel}`; // ให้ตรงกับคีย์ใน build-info และกับที่ copyDir ใช้
     const srcFile = path.join(from, rel);
     const dstFile = path.join(webSrc, dir, rel);
-    sources[`${dir}/${rel}`] = {
+    const srcContent = fs.readFileSync(srcFile);
+    const transform = transformIdFor(fullRel);
+    // ไฟล์ที่ถูกแปลง: เทียบแฮชของ "ผลลัพธ์หลังแปลง" ไม่ใช่แฮชไฟล์ต้นฉบับ
+    const expected = transform
+      ? fileHash(Buffer.from(transformHtml(srcContent.toString('utf8'), fullRel), 'utf8'))
+      : fileHash(srcContent);
+    sources[fullRel] = {
       src: hash(srcFile),
+      expected,
+      transform,
       copy: fs.existsSync(dstFile) ? hash(dstFile) : null,
     };
   }
 }
-const outOfSync = Object.entries(sources).filter(([, v]) => v.src !== v.copy).map(([k]) => k);
+const outOfSync = Object.entries(sources)
+  .filter(([, v]) => v.expected !== v.copy)
+  .map(([k]) => k);
 
 fs.writeFileSync(
   path.join(webDir, 'build-info.json'),

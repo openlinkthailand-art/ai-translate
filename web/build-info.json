@@ -1,102 +1,150 @@
 {
   "version": "1.0.0",
-  "builtAt": "2026-10-04T02:40:22.739Z",
+  "builtAt": "2026-10-04T10:37:42.170Z",
   "copied": 212,
   "files": {
     "common/constants.js": {
       "src": "edc806dccd8f",
+      "expected": "edc806dccd8f",
+      "transform": "",
       "copy": "edc806dccd8f"
     },
     "common/platform.js": {
       "src": "2672561e33c8",
+      "expected": "2672561e33c8",
+      "transform": "",
       "copy": "2672561e33c8"
     },
     "common/settings.js": {
       "src": "1892ddf05367",
+      "expected": "1892ddf05367",
+      "transform": "",
       "copy": "1892ddf05367"
     },
     "common/util.js": {
       "src": "6e1c100e23f0",
+      "expected": "6e1c100e23f0",
+      "transform": "",
       "copy": "6e1c100e23f0"
     },
     "core/ai.js": {
       "src": "2818d4ca19c3",
+      "expected": "2818d4ca19c3",
+      "transform": "",
       "copy": "2818d4ca19c3"
     },
     "core/cache.js": {
       "src": "bfa039bd0ed2",
+      "expected": "bfa039bd0ed2",
+      "transform": "",
       "copy": "bfa039bd0ed2"
     },
     "core/db.js": {
       "src": "29d5755227cd",
+      "expected": "29d5755227cd",
+      "transform": "",
       "copy": "29d5755227cd"
     },
     "core/dictionary.js": {
-      "src": "0c9e17ba5004",
-      "copy": "0c9e17ba5004"
+      "src": "d6e41b7cc9f3",
+      "expected": "d6e41b7cc9f3",
+      "transform": "",
+      "copy": "d6e41b7cc9f3"
     },
     "core/providers.js": {
       "src": "d493e9174d27",
+      "expected": "d493e9174d27",
+      "transform": "",
       "copy": "d493e9174d27"
     },
     "core/router.js": {
       "src": "1ae3f68460a3",
+      "expected": "1ae3f68460a3",
+      "transform": "",
       "copy": "1ae3f68460a3"
     },
     "core/translate-service.js": {
       "src": "a9471c7ca382",
+      "expected": "a9471c7ca382",
+      "transform": "",
       "copy": "a9471c7ca382"
     },
     "ui/api.js": {
       "src": "bdc27ec92e16",
+      "expected": "bdc27ec92e16",
+      "transform": "",
       "copy": "bdc27ec92e16"
     },
     "ui/card-style.js": {
       "src": "2a794805486d",
+      "expected": "2a794805486d",
+      "transform": "",
       "copy": "2a794805486d"
     },
     "ui/card.js": {
       "src": "b3eefaad8d65",
+      "expected": "b3eefaad8d65",
+      "transform": "",
       "copy": "b3eefaad8d65"
     },
     "ui/pages.css": {
       "src": "514999bd5d0a",
+      "expected": "514999bd5d0a",
+      "transform": "",
       "copy": "514999bd5d0a"
     },
     "viewer/viewer.css": {
       "src": "f5da312a8abb",
+      "expected": "f5da312a8abb",
+      "transform": "",
       "copy": "f5da312a8abb"
     },
     "viewer/viewer.html": {
       "src": "d7a949be14d3",
-      "copy": "d7a949be14d3"
+      "expected": "01f00e5c4b49",
+      "transform": "inject-icons-v1",
+      "copy": "01f00e5c4b49"
     },
     "viewer/viewer.js": {
       "src": "e9ee3cf89b1f",
+      "expected": "e9ee3cf89b1f",
+      "transform": "",
       "copy": "e9ee3cf89b1f"
     },
     "library/library.html": {
       "src": "3f48bc47b36a",
-      "copy": "3f48bc47b36a"
+      "expected": "7e066bb60a0b",
+      "transform": "inject-icons-v1",
+      "copy": "7e066bb60a0b"
     },
     "library/library.js": {
       "src": "639fed9e60fb",
+      "expected": "639fed9e60fb",
+      "transform": "",
       "copy": "639fed9e60fb"
     },
     "review/review.html": {
       "src": "e2468db3831d",
-      "copy": "e2468db3831d"
+      "expected": "c99992b2c311",
+      "transform": "inject-icons-v1",
+      "copy": "c99992b2c311"
     },
     "review/review.js": {
       "src": "be3df54b2eac",
+      "expected": "be3df54b2eac",
+      "transform": "",
       "copy": "be3df54b2eac"
     },
     "options/options.html": {
       "src": "170ff9106ce2",
-      "copy": "170ff9106ce2"
+      "expected": "1d313e2180d1",
+      "transform": "inject-icons-v1",
+      "copy": "1d313e2180d1"
     },
     "options/options.js": {
       "src": "d7b24a2d7a13",
+      "expected": "d7b24a2d7a13",
+      "transform": "",
       "copy": "d7b24a2d7a13"
     }
   }

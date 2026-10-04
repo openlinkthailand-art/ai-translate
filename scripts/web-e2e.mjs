@@ -2,7 +2,9 @@
  * ทดสอบเว็บแอป (PWA) แบบ end-to-end บน Chromium โหมดมือถือ
  * ครอบคลุม: service worker, share target, คลิปบอร์ด, คลังคำ, ทบทวน, ตั้งค่า, อ่าน PDF, ออฟไลน์
  *
- * วิธีใช้: node scripts/web-e2e.mjs
+ * วิธีใช้:
+ *   node scripts/web-e2e.mjs                        ทดสอบกับเซิร์ฟเวอร์ในเครื่อง (ไม่ต้องมีเน็ตก็ได้)
+ *   node scripts/web-e2e.mjs --url https://...      ทดสอบกับเว็บที่เผยแพร่จริง (ตรวจ HTTPS + hosting จริง)
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -14,10 +16,13 @@ const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const webRoot = path.join(root, 'web');
 const tmpDir = path.join(root, '.tmp');
 const pdfPath = path.join(tmpDir, 'sample.pdf');
+const urlArgIndex = process.argv.indexOf('--url');
+const liveUrl = urlArgIndex > -1 ? process.argv[urlArgIndex + 1] : null;
 
 let pass = 0;
 let fail = 0;
 const consoleErrors = [];
+const badResponses = [];
 
 function check(name, cond, detail = '') {
   if (cond) {
@@ -42,15 +47,20 @@ let context = null;
 
 try {
   if (!fs.existsSync(pdfPath)) throw new Error('ไม่พบ .tmp/sample.pdf — รัน node scripts/make-test-pdf.mjs ก่อน');
-  if (!fs.existsSync(path.join(webRoot, 'index.html'))) {
+  if (!liveUrl && !fs.existsSync(path.join(webRoot, 'index.html'))) {
     throw new Error('ยังไม่ได้ build เว็บแอป — รัน node scripts/build-web.mjs ก่อน');
   }
 
-  server = createStaticServer(webRoot);
-  await new Promise((r) => server.listen(0, '127.0.0.1', r));
-  const PORT = server.address().port;
-  const base = `http://127.0.0.1:${PORT}/`;
-  console.log(`เสิร์ฟเว็บแอปที่ ${base}`);
+  let base;
+  if (liveUrl) {
+    base = liveUrl.endsWith('/') ? liveUrl : `${liveUrl}/`;
+    console.log(`ทดสอบกับเว็บที่เผยแพร่จริง: ${base}`);
+  } else {
+    server = createStaticServer(webRoot);
+    await new Promise((r) => server.listen(0, '127.0.0.1', r));
+    base = `http://127.0.0.1:${server.address().port}/`;
+    console.log(`เสิร์ฟเว็บแอปที่ ${base}`);
+  }
 
   browser = await chromium.launch({ headless: true });
   context = await browser.newContext({
@@ -65,6 +75,10 @@ try {
     });
     return p;
   };
+  // เก็บคำขอที่ได้สถานะผิดพลาดไว้ด้วย เพื่อให้รู้ทันทีว่าไฟล์ใดมีปัญหา (รวมคำขอที่มาจาก worker)
+  context.on('response', (r) => {
+    if (r.status() >= 400) badResponses.push(`${r.status()} ${r.url()}`);
+  });
   const page = watch(await context.newPage());
 
   /* ---------------- 1) โหลดแอป + service worker ---------------- */
@@ -491,6 +505,10 @@ try {
 
 console.log('\n' + '='.repeat(52));
 console.log(`WEB E2E: ผ่าน ${pass} · ไม่ผ่าน ${fail}`);
+if (badResponses.length) {
+  console.log('\nคำขอที่ได้สถานะผิดพลาด:');
+  for (const r of [...new Set(badResponses)].slice(0, 8)) console.log('  ' + r.slice(0, 160));
+}
 if (consoleErrors.length) {
   console.log('\nerror ที่พบในคอนโซล:');
   for (const e of consoleErrors.slice(0, 8)) console.log('  ' + e.slice(0, 200));
