@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>อ่านไทย — โหมดอ่าน PDF</title>
+  <link rel="stylesheet" href="viewer.css" />
+</head>
+<body>
+  <header class="toolbar">
+    <div class="tb-group">
+      <button id="btn-open" class="tb-btn" title="เปิดไฟล์ PDF จากเครื่อง (Ctrl+O)">📂 เปิดไฟล์</button>
+      <input type="file" id="file-input" accept="application/pdf,.pdf" hidden />
+    </div>
+
+    <div class="tb-group">
+      <button id="btn-prev" class="tb-btn" title="หน้าก่อน (←)">◀</button>
+      <input id="page-input" class="tb-input" type="number" min="1" value="1" title="เลขหน้า" />
+      <span id="page-total" class="tb-label">/ 0</span>
+      <button id="btn-next" class="tb-btn" title="หน้าถัดไป (→)">▶</button>
+    </div>
+
+    <div class="tb-group">
+      <button id="btn-zoom-out" class="tb-btn" title="ย่อ (−)">−</button>
+      <span id="zoom-label" class="tb-label">100%</span>
+      <button id="btn-zoom-in" class="tb-btn" title="ขยาย (+)">+</button>
+      <button id="btn-fit" class="tb-btn" title="พอดีความกว้าง">⤢</button>
+    </div>
+
+    <div class="tb-group">
+      <button id="btn-sidebar" class="tb-btn tb-toggle" title="สารบัญ/ภาพย่อ">☰</button>
+      <button id="btn-search" class="tb-btn tb-toggle" title="ค้นหาในไฟล์ (Ctrl+F)">🔍</button>
+      <button id="btn-translate-page" class="tb-btn" title="แปลทั้งหน้าเป็นไทย">🌐 แปลหน้านี้</button>
+      <button id="btn-rotate" class="tb-btn" title="หมุนหน้า">⟳</button>
+    </div>
+
+    <div class="tb-spacer"></div>
+
+    <div class="tb-group">
+      <span id="doc-title" class="tb-title" title=""></span>
+      <button id="btn-original" class="tb-btn" title="เปิดไฟล์ต้นฉบับแบบปกติ">↗ ต้นฉบับ</button>
+      <button id="btn-options" class="tb-btn" title="ตั้งค่า">⚙</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside id="sidebar" class="sidebar" hidden>
+      <div class="side-tabs">
+        <button class="side-tab is-active" data-tab="outline">สารบัญ</button>
+        <button class="side-tab" data-tab="thumbs">หน้า</button>
+        <button class="side-tab" data-tab="search">ค้นหา</button>
+      </div>
+      <div id="tab-outline" class="side-pane"></div>
+      <div id="tab-thumbs" class="side-pane" hidden></div>
+      <div id="tab-search" class="side-pane" hidden>
+        <div class="search-row">
+          <input id="search-input" type="search" placeholder="พิมพ์คำที่ต้องการค้น…" />
+          <button id="search-go" class="tb-btn">ค้น</button>
+        </div>
+        <div id="search-results" class="search-results"></div>
+      </div>
+    </aside>
+
+    <main id="viewport" class="viewport">
+      <div id="pages" class="pages"></div>
+      <div id="dropzone" class="dropzone" hidden>
+        <div class="dz-box">
+          <div class="dz-icon">📄</div>
+          <div class="dz-text">ลากไฟล์ PDF มาวางที่นี่</div>
+          <button id="dz-open" class="tb-btn">เลือกไฟล์จากเครื่อง</button>
+        </div>
+      </div>
+    </main>
+
+    <aside id="translation-panel" class="trans-panel" hidden>
+      <div class="trans-head">
+        <strong>คำแปลหน้านี้</strong>
+        <span id="trans-status" class="tb-label"></span>
+        <button id="trans-close" class="tb-btn">✕</button>
+      </div>
+      <div id="trans-body" class="trans-body"></div>
+    </aside>
+  </div>
+
+  <div id="toast" class="toast" hidden></div>
+  <div id="loading" class="loading" hidden><div class="spinner"></div><span id="loading-text">กำลังโหลด…</span></div>
+
+  <div id="error-panel" class="error-panel" hidden>
+    <div class="err-box">
+      <h2>เปิด PDF ไม่สำเร็จ</h2>
+      <p id="error-message"></p>
+      <ul class="err-hints">
+        <li>ถ้าไฟล์อยู่ในเครื่อง ให้กด "เลือกไฟล์จากเครื่อง" (ไม่ต้องให้สิทธิ์อะไรเพิ่ม)</li>
+        <li>ถ้าไฟล์อยู่บนเว็บที่ต้องล็อกอิน ลองเปิดแท็บนั้นในเบราว์เซอร์ก่อน แล้วค่อยเปิดซ้ำ</li>
+        <li>ถ้าเว็บไม่อนุญาตให้ดึงไฟล์ ให้กด "เปิดแบบปกติ" เพื่ออ่านด้วยโปรแกรมอ่าน PDF ของเบราว์เซอร์</li>
+      </ul>
+      <div class="err-actions">
+        <button id="err-open-file" class="tb-btn tb-primary">เลือกไฟล์จากเครื่อง</button>
+        <a id="err-original" class="tb-btn" href="#" target="_blank" rel="noreferrer">เปิดแบบปกติ</a>
+        <button id="err-retry" class="tb-btn">ลองใหม่</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../vendor/pdfjs/pdf.min.js"></script>
+  <script src="../config.js"></script>
+  <script type="module" src="viewer.js"></script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+{
+  "version": "1.0.0",
+  "builtAt": "2026-10-04T02:40:22.739Z",
+  "copied": 212,
+  "files": {
+    "common/constants.js": {
+      "src": "edc806dccd8f",
+      "copy": "edc806dccd8f"
+    },
+    "common/platform.js": {
+      "src": "2672561e33c8",
+      "copy": "2672561e33c8"
+    },
+    "common/settings.js": {
+      "src": "1892ddf05367",
+      "copy": "1892ddf05367"
+    },
+    "common/util.js": {
+      "src": "6e1c100e23f0",
+      "copy": "6e1c100e23f0"
+    },
+    "core/ai.js": {
+      "src": "2818d4ca19c3",
+      "copy": "2818d4ca19c3"
+    },
+    "core/cache.js": {
+      "src": "bfa039bd0ed2",
+      "copy": "bfa039bd0ed2"
+    },
+    "core/db.js": {
+      "src": "29d5755227cd",
+      "copy": "29d5755227cd"
+    },
+    "core/dictionary.js": {
+      "src": "0c9e17ba5004",
+      "copy": "0c9e17ba5004"
+    },
+    "core/providers.js": {
+      "src": "d493e9174d27",
+      "copy": "d493e9174d27"
+    },
+    "core/router.js": {
+      "src": "1ae3f68460a3",
+      "copy": "1ae3f68460a3"
+    },
+    "core/translate-service.js": {
+      "src": "a9471c7ca382",
+      "copy": "a9471c7ca382"
+    },
+    "ui/api.js": {
+      "src": "bdc27ec92e16",
+      "copy": "bdc27ec92e16"
+    },
+    "ui/card-style.js": {
+      "src": "2a794805486d",
+      "copy": "2a794805486d"
+    },
+    "ui/card.js": {
+      "src": "b3eefaad8d65",
+      "copy": "b3eefaad8d65"
+    },
+    "ui/pages.css": {
+      "src": "514999bd5d0a",
+      "copy": "514999bd5d0a"
+    },
+    "viewer/viewer.css": {
+      "src": "f5da312a8abb",
+      "copy": "f5da312a8abb"
+    },
+    "viewer/viewer.html": {
+      "src": "d7a949be14d3",
+      "copy": "d7a949be14d3"
+    },
+    "viewer/viewer.js": {
+      "src": "e9ee3cf89b1f",
+      "copy": "e9ee3cf89b1f"
+    },
+    "library/library.html": {
+      "src": "3f48bc47b36a",
+      "copy": "3f48bc47b36a"
+    },
+    "library/library.js": {
+      "src": "639fed9e60fb",
+      "copy": "639fed9e60fb"
+    },
+    "review/review.html": {
+      "src": "e2468db3831d",
+      "copy": "e2468db3831d"
+    },
+    "review/review.js": {
+      "src": "be3df54b2eac",
+      "copy": "be3df54b2eac"
+    },
+    "options/options.html": {
+      "src": "170ff9106ce2",
+      "copy": "170ff9106ce2"
+    },
+    "options/options.js": {
+      "src": "d7b24a2d7a13",
+      "copy": "d7b24a2d7a13"
+    }
+  }
+}

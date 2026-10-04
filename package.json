@@ -1,0 +1,26 @@
+{
+  "name": "atthai-translate-reader",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "อ่านไทย Translate Reader — Chrome extension + Windows helper for reading English books/PDFs with instant contextual translation, examples, easy synonyms and a personal vocabulary library",
+  "scripts": {
+    "check": "node scripts/check-js.mjs",
+    "icons": "node scripts/make-icons.mjs",
+    "build:web": "node scripts/build-web.mjs",
+    "serve:web": "node scripts/serve-web.mjs",
+    "cors": "node scripts/check-cors.mjs",
+    "smoke": "node scripts/smoke-test.mjs",
+    "test-pdf": "node scripts/make-test-pdf.mjs",
+    "e2e": "node scripts/e2e-test.mjs",
+    "e2e:web": "node scripts/web-e2e.mjs",
+    "test": "node scripts/check-js.mjs && node scripts/build-web.mjs && node scripts/smoke-test.mjs",
+    "verify": "node scripts/check-js.mjs && node scripts/build-web.mjs && node scripts/smoke-test.mjs && node scripts/make-test-pdf.mjs && node scripts/e2e-test.mjs && node scripts/web-e2e.mjs",
+    "package": "node scripts/package.mjs && node scripts/package-web.mjs"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "playwright": "^1.63.0",
+    "playwright-core": "^1.63.0"
+  }
+}

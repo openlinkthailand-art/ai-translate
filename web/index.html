@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>อ่านไทย — แปลและคลังคำศัพท์</title>
+  <meta name="description" content="แปลคำและประโยคจากข้อความที่แชร์มาจากแอปไหนก็ได้ พร้อมตัวอย่าง คำพ้อง และคลังคำศัพท์ทบทวนได้" />
+  <meta name="theme-color" content="#0f766e" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="icon" href="icons/icon192.png" />
+  <link rel="stylesheet" href="src/ui/pages.css" />
+  <link rel="stylesheet" href="src/app/app.css" />
+</head>
+<body>
+  <header class="app-head">
+    <div class="brand">
+      <span class="logo">อ</span>
+      <div>
+        <div class="t">อ่านไทย</div>
+        <div class="s" id="sub">พร้อมแปล</div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn sm" id="btn-install" hidden>⬇ ติดตั้งแอป</button>
+  </header>
+
+  <nav class="web-nav" id="nav">
+    <a href="index.html" class="is-active">🔎 แปล</a>
+    <a href="src/library/library.html">📚 คลังคำ</a>
+    <a href="src/review/review.html">🎯 ทบทวน<span id="due-badge"></span></a>
+    <a href="src/viewer/viewer.html">📄 PDF</a>
+    <a href="src/options/options.html">⚙ ตั้งค่า</a>
+  </nav>
+
+  <main class="app-main">
+    <div class="stats" id="stats">
+      <div class="stat"><div class="n" id="s-total">0</div><div class="l">คำในคลัง</div></div>
+      <div class="stat"><div class="n" id="s-due">0</div><div class="l">ถึงกำหนดทบทวน</div></div>
+      <div class="stat"><div class="n" id="s-today">0</div><div class="l">เพิ่มวันนี้</div></div>
+    </div>
+
+    <section class="card" id="input-card">
+      <textarea id="input" rows="3" placeholder="วางข้อความตรงนี้…&#10;หรือเลือกข้อความในแอปอื่น แล้วกด แชร์ → อ่านไทย"></textarea>
+      <div class="row wrap-row" style="margin-top: 10px">
+        <button class="btn primary" id="go">แปล</button>
+        <button class="btn" id="paste">📋 วางจากคลิปบอร์ด</button>
+        <button class="btn ghost" id="clear">ล้าง</button>
+        <div class="spacer"></div>
+        <button class="btn sm ghost" id="btn-speak" title="ออกเสียงข้อความ">🔊</button>
+      </div>
+      <div class="modes" id="modes" hidden>
+        <button class="mode is-active" data-mode="auto">แปลเร็ว</button>
+        <button class="mode" data-mode="ai">AI อธิบายละเอียด</button>
+      </div>
+    </section>
+
+    <section id="result-host"></section>
+
+    <section class="card" id="words-card" hidden>
+      <strong class="small">🔍 คำในข้อความนี้ — แตะเพื่อดูคำพ้องและตัวอย่าง</strong>
+      <div class="chips" id="word-chips"></div>
+    </section>
+
+    <section class="card" id="recent-card">
+      <div class="row">
+        <strong class="small">คำล่าสุด</strong>
+        <div class="spacer"></div>
+        <a class="small" href="src/library/library.html">ดูทั้งหมด →</a>
+      </div>
+      <div id="recent"></div>
+    </section>
+
+    <section class="card hint-card" id="howto">
+      <strong class="small">💡 วิธีใช้บนมือถือ</strong>
+      <ol class="small">
+        <li>อ่านอะไรอยู่ก็ได้ (เว็บ, PDF, Kindle, อีเมล) แล้ว<b>เลือกข้อความ</b></li>
+        <li>กด <b>แชร์</b> แล้วเลือก <b>อ่านไทย</b> → ได้คำแปลทันที</li>
+        <li>กด <b>บันทึกเข้าคลังคำ</b> เพื่อกลับมาทบทวนภายหลัง</li>
+      </ol>
+      <p class="small muted" id="install-hint"></p>
+    </section>
+  </main>
+
+  <div id="toast" class="hidden"></div>
+  <script src="src/config.js"></script>
+  <script type="module" src="src/app/app.js"></script>
+</body>
+</html>

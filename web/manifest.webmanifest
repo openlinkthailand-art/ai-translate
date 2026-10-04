@@ -1,0 +1,37 @@
+{
+  "name": "อ่านไทย — แปลและคลังคำศัพท์",
+  "short_name": "อ่านไทย",
+  "description": "แปลคำและประโยคจากข้อความที่แชร์มาจากแอปไหนก็ได้ พร้อมตัวอย่างเหตุการณ์จริง คำพ้องที่ใช้ง่าย และคลังคำศัพท์ทบทวนได้",
+  "lang": "th",
+  "dir": "ltr",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#14161b",
+  "theme_color": "#0f766e",
+  "categories": ["education", "productivity", "books"],
+  "icons": [
+    { "src": "icons/icon192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon192-maskable.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "share_target": {
+    "action": "share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "shortcuts": [
+    { "name": "แปลจากคลิปบอร์ด", "short_name": "แปล", "url": "index.html" },
+    { "name": "คลังคำศัพท์", "short_name": "คลังคำ", "url": "src/library/library.html" },
+    { "name": "ทบทวนคำศัพท์", "short_name": "ทบทวน", "url": "src/review/review.html" },
+    { "name": "อ่าน PDF", "short_name": "PDF", "url": "src/viewer/viewer.html" }
+  ]
+}

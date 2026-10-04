@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>คลังคำศัพท์ — อ่านไทย</title>
+  <link rel="stylesheet" href="../ui/pages.css" />
+  <style>
+    .head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+    .head h1 { margin: 0; }
+    .toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+    .toolbar input[type="search"] { flex: 1; min-width: 200px; }
+    .toolbar select { width: auto; min-width: 130px; }
+    .detail { border-top: 1px dashed var(--border); margin-top: 10px; padding-top: 10px; }
+    .detail .sec { margin-bottom: 10px; }
+    .detail .lbl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--fg-muted); margin-bottom: 4px; }
+    .detail .ex { background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px; padding: 7px 9px; margin-bottom: 5px; font-size: 13px; }
+    .detail .ex .th { color: var(--fg-muted); }
+    .tagrow { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+    .tagrow input { width: auto; min-width: 160px; }
+    .actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+    .srs { font-size: 12px; color: var(--fg-muted); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <h1>📚 คลังคำศัพท์ของฉัน</h1>
+        <div class="small muted" id="summary">—</div>
+      </div>
+      <div class="spacer"></div>
+      <button class="btn primary" id="btn-review">🎯 ทบทวน</button>
+      <button class="btn" id="btn-export-json">⬇ สำรอง JSON</button>
+      <button class="btn" id="btn-export-csv">⬇ CSV</button>
+      <button class="btn" id="btn-import">⬆ นำเข้า</button>
+      <input type="file" id="import-file" accept="application/json,.json" hidden />
+      <button class="btn" id="btn-options">⚙ ตั้งค่า</button>
+    </div>
+
+    <div class="toolbar">
+      <input type="search" id="q" placeholder="ค้นหาคำ คำแปล บริบท หรือแท็ก…" />
+      <select id="sort">
+        <option value="newest">ใหม่สุดก่อน</option>
+        <option value="oldest">เก่าสุดก่อน</option>
+        <option value="alpha">เรียงตามตัวอักษร</option>
+        <option value="due">ถึงกำหนดทบทวนก่อน</option>
+        <option value="reviews">ทบทวนบ่อยสุด</option>
+      </select>
+      <select id="tag"><option value="">ทุกแท็ก</option></select>
+      <button class="btn sm" id="only-star">⭐ ปักดาว</button>
+      <button class="btn sm" id="only-due">⏰ ถึงกำหนด</button>
+    </div>
+
+    <div id="list"></div>
+  </div>
+  <script src="../config.js"></script>
+  <script type="module" src="library.js"></script>
+</body>
+</html>

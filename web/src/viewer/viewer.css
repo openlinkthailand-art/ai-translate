@@ -1,0 +1,221 @@
+/* โหมดอ่าน PDF — ธีมมืดเป็นหลักเพื่อถนอมสายตาเวลาอ่านนาน ๆ */
+:root {
+  --bg: #14161b;
+  --bg-soft: #1b1e25;
+  --bg-elev: #22262f;
+  --fg: #e8ecf3;
+  --fg-muted: #99a3b3;
+  --border: #2c323d;
+  --accent: #2dd4bf;
+  --accent-fg: #06231f;
+  --danger: #f87171;
+  --toolbar-h: 46px;
+}
+:root[data-theme="light"] {
+  --bg: #eceef2;
+  --bg-soft: #ffffff;
+  --bg-elev: #f7f8fa;
+  --fg: #14181f;
+  --fg-muted: #5c6675;
+  --border: #d9dee7;
+  --accent: #0f766e;
+  --accent-fg: #ffffff;
+}
+
+* { box-sizing: border-box; }
+/* สำคัญ: คลาสที่มี display กำหนดไว้จะทับ attribute hidden ทำให้ overlay ที่ซ่อนอยู่ยังบล็อกการคลิก */
+[hidden] { display: none !important; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "Noto Sans Thai", "Sarabun", "Leelawadee UI", "Segoe UI", system-ui, sans-serif;
+  font-size: 14px;
+  overflow: hidden;
+}
+
+/* ---------- toolbar ---------- */
+.toolbar {
+  height: var(--toolbar-h);
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 10px;
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--border);
+  position: relative; z-index: 20;
+}
+.tb-group { display: flex; align-items: center; gap: 4px; }
+.tb-spacer { flex: 1; }
+.tb-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 10px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--bg-elev); color: var(--fg);
+  font-size: 13px; cursor: pointer; font-family: inherit; white-space: nowrap;
+  text-decoration: none;
+}
+.tb-btn:hover { border-color: var(--accent); color: var(--accent); }
+.tb-btn.is-active { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); font-weight: 600; }
+.tb-btn[disabled] { opacity: .45; cursor: default; }
+.tb-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); font-weight: 600; }
+.tb-input {
+  width: 58px; padding: 5px 6px; text-align: center;
+  border-radius: 8px; border: 1px solid var(--border);
+  background: var(--bg-elev); color: var(--fg); font-family: inherit; font-size: 13px;
+}
+.tb-label { color: var(--fg-muted); font-size: 12.5px; white-space: nowrap; }
+.tb-title {
+  max-width: 34vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: var(--fg-muted); font-size: 12.5px;
+}
+
+/* ---------- layout ---------- */
+.layout { display: flex; height: calc(100% - var(--toolbar-h)); }
+.sidebar {
+  width: 260px; flex: 0 0 260px;
+  background: var(--bg-soft); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; min-height: 0;
+}
+.side-tabs { display: flex; border-bottom: 1px solid var(--border); }
+.side-tab {
+  flex: 1; padding: 9px 6px; border: 0; background: transparent; color: var(--fg-muted);
+  cursor: pointer; font-family: inherit; font-size: 13px; border-bottom: 2px solid transparent;
+}
+.side-tab.is-active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+.side-pane { flex: 1; overflow: auto; padding: 8px; min-height: 0; }
+.outline-item {
+  display: block; width: 100%; text-align: left; padding: 5px 7px; border-radius: 7px;
+  border: 0; background: transparent; color: var(--fg); cursor: pointer; font-family: inherit; font-size: 13px;
+}
+.outline-item:hover { background: var(--bg-elev); color: var(--accent); }
+.thumb {
+  display: block; width: 100%; margin: 0 0 8px; padding: 0; border: 1px solid var(--border);
+  border-radius: 6px; overflow: hidden; cursor: pointer; background: #fff; position: relative;
+}
+.thumb.is-active { outline: 2px solid var(--accent); }
+.thumb canvas { display: block; width: 100%; height: auto; }
+.thumb-label {
+  position: absolute; bottom: 0; right: 0; background: rgba(0,0,0,.6); color: #fff;
+  font-size: 10px; padding: 1px 5px; border-top-left-radius: 6px;
+}
+.search-row { display: flex; gap: 5px; margin-bottom: 8px; }
+.search-row input {
+  flex: 1; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--bg-elev); color: var(--fg); font-family: inherit; font-size: 13px;
+}
+.search-results { display: flex; flex-direction: column; gap: 5px; }
+.search-hit {
+  text-align: left; padding: 7px 8px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--bg-elev); color: var(--fg); cursor: pointer; font-family: inherit; font-size: 12.5px;
+}
+.search-hit:hover { border-color: var(--accent); }
+.search-hit b { color: var(--accent); }
+
+/* ---------- pages ---------- */
+.viewport { flex: 1; overflow: auto; position: relative; padding: 16px 0 60px; min-width: 0; }
+.pages { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.page {
+  position: relative; background: #fff; box-shadow: 0 3px 14px rgba(0,0,0,.35);
+  border-radius: 3px; overflow: hidden;
+}
+.page canvas { display: block; }
+.page-loading {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  color: #8892a4; font-size: 12px; background: #fafbfc;
+}
+.page-num {
+  position: absolute; bottom: -11px; right: 6px; font-size: 11px;
+  color: var(--fg-muted); background: var(--bg); padding: 0 5px; border-radius: 6px;
+}
+
+/* text layer ของ pdf.js */
+.textLayer {
+  position: absolute; text-align: initial; inset: 0;
+  overflow: clip; opacity: 1; line-height: 1;
+  -webkit-text-size-adjust: none; text-size-adjust: none;
+  forced-color-adjust: none; transform-origin: 0 0;
+  caret-color: CanvasText; z-index: 2;
+}
+.textLayer span, .textLayer br {
+  color: transparent; position: absolute; white-space: pre;
+  cursor: text; transform-origin: 0% 0%;
+}
+.textLayer ::selection { background: rgba(45,212,191,.35); }
+.textLayer .highlight { background: rgba(255,214,10,.45); border-radius: 2px; }
+.textLayer .endOfContent {
+  display: block; position: absolute; inset: 100% 0 0; z-index: -1;
+  cursor: default; user-select: none;
+}
+
+/* ---------- translation panel ---------- */
+.trans-panel {
+  width: 420px; flex: 0 0 420px; background: var(--bg-soft);
+  border-left: 1px solid var(--border); display: flex; flex-direction: column; min-height: 0;
+}
+.trans-head {
+  display: flex; align-items: center; gap: 8px; padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.trans-head .tb-label { flex: 1; }
+.trans-body { flex: 1; overflow: auto; padding: 12px 14px; line-height: 1.85; font-size: 15px; }
+.trans-body h3 { font-size: 13px; color: var(--fg-muted); margin: 14px 0 6px; font-weight: 700; }
+.trans-body p { margin: 0 0 10px; }
+.trans-body .src { color: var(--fg-muted); font-size: 12.5px; }
+
+/* ---------- states ---------- */
+.dropzone {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  background: rgba(10,12,16,.75); z-index: 30;
+}
+.dz-box { text-align: center; }
+.dz-icon { font-size: 42px; }
+.dz-text { margin: 8px 0 14px; color: var(--fg); }
+.toast {
+  position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+  background: var(--bg-elev); border: 1px solid var(--border); color: var(--fg);
+  padding: 8px 14px; border-radius: 10px; font-size: 13px; z-index: 60;
+  box-shadow: 0 8px 26px rgba(0,0,0,.35);
+}
+.loading {
+  position: fixed; inset: 0; display: grid; place-items: center; gap: 10px;
+  background: rgba(10,12,16,.6); z-index: 50; color: var(--fg);
+}
+.loading .spinner {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 3px solid var(--border); border-top-color: var(--accent);
+  animation: spin .8s linear infinite; margin: 0 auto 10px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.error-panel { position: fixed; inset: 0; display: grid; place-items: center; background: rgba(10,12,16,.85); z-index: 70; }
+.err-box {
+  max-width: 620px; background: var(--bg-soft); border: 1px solid var(--border);
+  border-radius: 14px; padding: 22px 24px; line-height: 1.7;
+}
+.err-box h2 { margin: 0 0 8px; font-size: 18px; color: var(--danger); }
+.err-hints { color: var(--fg-muted); font-size: 13px; padding-left: 20px; }
+.err-actions { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+
+/* ---------- จอมือถือ: แถบเครื่องมือเลื่อนได้ + แผงข้างซ้อนทับหน้า ---------- */
+@media (max-width: 760px) {
+  :root { --toolbar-h: 50px; }
+  .toolbar { overflow-x: auto; gap: 6px; padding: 0 8px; scrollbar-width: none; }
+  .toolbar::-webkit-scrollbar { display: none; }
+  .tb-title { display: none; }
+  .tb-btn { padding: 8px 11px; font-size: 13.5px; -webkit-tap-highlight-color: transparent; }
+  .tb-input { width: 50px; font-size: 16px; }
+  .layout { position: relative; }
+  .sidebar {
+    position: absolute; top: 0; bottom: 0; left: 0; z-index: 30;
+    width: min(86vw, 320px); box-shadow: 0 0 30px rgba(0, 0, 0, .55);
+  }
+  .trans-panel {
+    position: absolute; top: 0; bottom: 0; right: 0; z-index: 30;
+    width: min(92vw, 460px); box-shadow: 0 0 30px rgba(0, 0, 0, .55);
+  }
+  .viewport { padding: 10px 0 50px; }
+  .page { border-radius: 0; }
+  .trans-body { font-size: 16px; line-height: 1.9; }
+  .side-tab { padding: 11px 6px; font-size: 13.5px; }
+  .outline-item, .search-hit { padding: 9px 8px; font-size: 13.5px; }
+  .err-box { margin: 14px; padding: 18px; }
+  .err-actions .tb-btn { padding: 10px 14px; }
+}
+

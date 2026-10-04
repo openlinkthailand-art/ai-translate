@@ -1,0 +1,24 @@
+# ไฟล์ชั่วคราวและของที่สร้างขึ้น
+node_modules/
+dist/
+.tmp/
+
+# ไฟล์ที่ระบบปฏิบัติการสร้าง
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# ไฟล์ที่โปรแกรมแก้ไขสร้าง
+*.log
+*.bak
+*.swp
+.vscode/
+.idea/
+
+# ความลับ (ห้าม commit เด็ดขาด)
+.env
+.env.*
+*.pem
+*.key
+secrets.json
+config.local.json

@@ -1,0 +1,72 @@
+{
+  "manifest_version": 3,
+  "name": "อ่านไทย Translate Reader",
+  "short_name": "อ่านไทย",
+  "version": "1.0.0",
+  "description": "ดับเบิลคลิกหรือคลุมข้อความเพื่อแปล พร้อมตัวอย่างประโยคจริง คำพ้องความหมายง่าย ๆ คลังคำศัพท์ และโหมดอ่าน PDF",
+  "minimum_chrome_version": "114",
+  "icons": {
+    "16": "assets/icon16.png",
+    "32": "assets/icon32.png",
+    "48": "assets/icon48.png",
+    "128": "assets/icon128.png"
+  },
+  "permissions": [
+    "storage",
+    "unlimitedStorage",
+    "contextMenus",
+    "tabs",
+    "webNavigation",
+    "webRequest",
+    "scripting",
+    "alarms"
+  ],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "src/background/service-worker.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content/content.js"],
+      "run_at": "document_idle",
+      "all_frames": true,
+      "match_about_blank": false
+    }
+  ],
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_title": "อ่านไทย — แปลและคลังคำศัพท์",
+    "default_icon": {
+      "16": "assets/icon16.png",
+      "32": "assets/icon32.png",
+      "48": "assets/icon48.png",
+      "128": "assets/icon128.png"
+    }
+  },
+  "options_page": "src/options/options.html",
+  "commands": {
+    "translate-selection": {
+      "suggested_key": { "default": "Alt+T" },
+      "description": "แปลข้อความที่เลือกไว้"
+    },
+    "save-selection": {
+      "suggested_key": { "default": "Alt+S" },
+      "description": "บันทึกคำที่เลือกเข้าคลังคำศัพท์"
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "src/ui/*",
+        "src/core/*",
+        "src/common/*",
+        "src/viewer/*",
+        "vendor/pdfjs/*",
+        "assets/*"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

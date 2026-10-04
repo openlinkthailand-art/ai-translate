@@ -1,0 +1,57 @@
+name: Deploy mobile app (PWA) to GitHub Pages
+
+# ประกอบเว็บแอปจากต้นฉบับใน extension/src แล้วเผยแพร่โฟลเดอร์ web/ ขึ้น GitHub Pages
+# เปิดใช้ครั้งเดียว: Settings → Pages → Source: GitHub Actions
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'extension/**'
+      - 'web/**'
+      - 'scripts/**'
+      - 'package.json'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # ตรวจว่าโค้ดที่ใช้ร่วมกันไม่ค้างเก่า และ manifest ถูกต้อง (ไม่ต้อง npm install เพราะสคริปต์ใช้แค่ built-in)
+      - name: ตรวจสอบโปรเจกต์
+        run: node scripts/check-js.mjs
+
+      # สร้าง web/ ใหม่จากต้นฉบับ เพื่อให้สิ่งที่ deploy ตรงกับ source เสมอ
+      - name: ประกอบเว็บแอป
+        run: node scripts/build-web.mjs
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

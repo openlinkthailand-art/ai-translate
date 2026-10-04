@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ตั้งค่า — อ่านไทย Translate Reader</title>
+  <link rel="stylesheet" href="../ui/pages.css" />
+  <style>
+    .head { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+    .logo { width: 42px; height: 42px; border-radius: 12px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 20px; }
+    .head h1 { margin: 0; }
+    .head .sub { color: var(--fg-muted); font-size: 12.8px; }
+    .prov { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px dashed var(--border); }
+    .prov:last-child { border-bottom: 0; }
+    .prov input[type="checkbox"] { width: 17px; height: 17px; margin-top: 3px; accent-color: var(--accent); }
+    .prov .p-body { flex: 1; }
+    .prov .p-title { font-weight: 600; }
+    .prov .p-note { color: var(--fg-muted); font-size: 12.2px; }
+    .status { font-size: 12.5px; margin-left: 8px; }
+    .status.ok { color: var(--ok); }
+    .status.err { color: var(--danger); }
+    kbd { background: var(--panel-2); border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 5px; padding: 1px 5px; font-size: 12px; font-family: inherit; }
+    .welcome { background: linear-gradient(135deg, var(--accent-soft), transparent); border: 1px solid var(--accent); border-radius: 12px; padding: 14px 16px; margin-bottom: 18px; }
+    .danger-zone { border-color: var(--danger); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="head">
+      <div class="logo">อ</div>
+      <div>
+        <h1>อ่านไทย Translate Reader</h1>
+        <div class="sub"><span id="sub-prefix">ตั้งค่าการแปล คลังคำศัพท์ และโหมดอ่าน PDF</span> · v<span id="version">1.0.0</span></div>
+      </div>
+      <div class="spacer"></div>
+      <button class="btn" id="btn-open-library">📚 คลังคำศัพท์</button>
+      <button class="btn" id="btn-open-review">🎯 ทบทวน</button>
+    </div>
+
+    <div id="welcome" class="welcome hidden ext-only">
+      <strong>ติดตั้งเรียบร้อย 🎉</strong>
+      <p class="small" style="margin:6px 0 0">
+        วิธีใช้: เปิดหน้าเว็บหรือ PDF แล้ว <b>ดับเบิลคลิกคำ</b> เพื่อแปลทันที หรือ <b>คลุมข้อความ</b> แล้วกดปุ่ม 🌐 แปล ที่ลอยขึ้นมา<br>
+        คีย์ลัด: <kbd>Alt</kbd>+<kbd>T</kbd> แปลข้อความที่เลือก · <kbd>Alt</kbd>+<kbd>S</kbd> บันทึกเข้าคลังคำ
+      </p>
+    </div>
+
+    <div id="web-install" class="welcome hidden">
+      <strong>ติดตั้งเป็นแอปบนมือถือ 📱</strong>
+      <p class="small" style="margin:6px 0 0">
+        เปิดเมนูของเบราว์เซอร์ (⋮) แล้วเลือก <b>ติดตั้งแอป</b> หรือ <b>เพิ่มลงในหน้าจอหลัก</b><br>
+        หลังจากนั้นเวลาอ่านอะไรอยู่ <b>เลือกข้อความ → แชร์ → อ่านไทย</b> ก็แปลได้ทันทีโดยไม่ต้องสลับแอป
+      </p>
+    </div>
+
+    <div class="tabs" id="tabs">
+      <button class="tab is-active" data-tab="general">ทั่วไป</button>
+      <button class="tab" data-tab="translation">การแปล</button>
+      <button class="tab" data-tab="ai">AI ช่วยอธิบาย</button>
+      <button class="tab" data-tab="enrich">ตัวอย่าง/คำพ้อง</button>
+      <button class="tab" data-tab="pdf">PDF</button>
+      <button class="tab" data-tab="library">คลังคำศัพท์</button>
+      <button class="tab" data-tab="data">ข้อมูล &amp; สำรอง</button>
+    </div>
+
+    <div id="pane-general" class="pane"></div>
+
+    <div id="pane-translation" class="pane hidden">
+      <div class="card">
+        <h2>ผู้ให้บริการแปล</h2>
+        <p class="desc">ระบบจะลองตามลำดับจากบนลงล่าง ถ้าตัวบนล้มเหลวจึงไปตัวถัดไป (ต้องติ๊กอย่างน้อย 1 ตัว)</p>
+        <div id="provider-list"></div>
+      </div>
+      <div id="translation-fields"></div>
+    </div>
+
+    <div id="pane-ai" class="pane hidden">
+      <div class="card">
+        <h2>AI ช่วยแปลตามบริบท</h2>
+        <p class="desc">
+          AI จะอ่านประโยคที่คุณกำลังอ่าน แล้วแปลให้ตรงบริบท พร้อมอธิบายเป็นไทย ยกตัวอย่างเหตุการณ์จริง
+          และแนะนำคำพ้องที่ใช้ง่าย — ต้องมี API key ของเจ้าที่เลือก (หรือรัน Ollama ในเครื่องก็ใช้ฟรี)
+        </p>
+        <div id="ai-fields"></div>
+        <div class="row" style="margin-top:6px">
+          <button class="btn primary" id="btn-test-ai">ทดสอบการเชื่อมต่อ AI</button>
+          <span class="status" id="ai-status"></span>
+        </div>
+      </div>
+    </div>
+
+    <div id="pane-enrich" class="pane hidden"></div>
+    <div id="pane-pdf" class="pane hidden"></div>
+    <div id="pane-library" class="pane hidden"></div>
+
+    <div id="pane-data" class="pane hidden">
+      <div class="card">
+        <h2>สำรองข้อมูล</h2>
+        <p class="desc">คลังคำศัพท์เก็บอยู่ในเครื่องคุณเท่านั้น ไม่มีการส่งขึ้นเซิร์ฟเวอร์</p>
+        <div class="row wrap-row">
+          <button class="btn" id="btn-export-json">⬇ ส่งออก JSON</button>
+          <button class="btn" id="btn-export-csv">⬇ ส่งออก CSV (Excel)</button>
+          <button class="btn" id="btn-import">⬆ นำเข้า JSON</button>
+          <input type="file" id="import-file" accept="application/json,.json" hidden />
+        </div>
+        <p class="small muted" style="margin-top:10px">
+          CSV เหมาะกับการเอาไปทำบัตรคำใน Anki หรือ Excel · JSON เหมาะกับการสำรอง/ย้ายเครื่อง
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>แคชการแปล</h2>
+        <p class="desc">ผลการแปลที่เคยเปิดจะถูกจำไว้เพื่อให้เปิดซ้ำได้ทันทีโดยไม่ต้องต่อเน็ต</p>
+        <div class="row">
+          <span class="chip" id="cache-stat">—</span>
+          <button class="btn sm" id="btn-clear-cache">ล้างแคช</button>
+        </div>
+      </div>
+
+      <div class="card danger-zone">
+        <h2>โซนอันตราย</h2>
+        <p class="desc">การกระทำเหล่านี้ย้อนกลับไม่ได้</p>
+        <div class="row wrap-row">
+          <button class="btn danger" id="btn-reset-settings">คืนค่าตั้งต้นทั้งหมด</button>
+          <button class="btn danger" id="btn-clear-library">ลบคำศัพท์ทั้งหมดในคลัง</button>
+        </div>
+      </div>
+    </div>
+
+    <p class="small muted center" style="margin-top:22px">
+      ข้อมูลของคุณอยู่ในเครื่องนี้เท่านั้น · สร้างด้วยความตั้งใจให้คนไทยอ่านหนังสืออังกฤษได้สนุกขึ้น
+    </p>
+  </div>
+
+  <script src="../config.js"></script>
+  <script type="module" src="options.js"></script>
+</body>
+</html>
