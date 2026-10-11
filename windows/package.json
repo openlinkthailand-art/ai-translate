@@ -1,0 +1,35 @@
+{
+  "name": "atthai-windows",
+  "version": "1.0.0",
+  "private": true,
+  "description": "อ่านไทย — แอป Windows (Electron ห่อ ../web) พร้อมคีย์ลัดระดับระบบ",
+  "main": "main.js",
+  "author": "openlinkthailand-art",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^37.0.0",
+    "electron-builder": "^26.0.0"
+  },
+  "build": {
+    "appId": "th.openlink.atthai",
+    "productName": "AtThai Reader",
+    "directories": { "output": "dist" },
+    "files": ["main.js", "package.json"],
+    "extraResources": [
+      { "from": "../web", "to": "web" },
+      { "from": "copy-selection.ps1", "to": "copy-selection.ps1" }
+    ],
+    "win": {
+      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "icon": "../web/icons/icon512.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": false
+    }
+  }
+}

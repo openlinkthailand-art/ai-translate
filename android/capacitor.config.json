@@ -1,0 +1,11 @@
+{
+  "appId": "th.openlink.atthai",
+  "appName": "อ่านไทย",
+  "webDir": "../web",
+  "android": {
+    "allowMixedContent": false
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}
