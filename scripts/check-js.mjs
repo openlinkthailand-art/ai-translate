@@ -145,7 +145,7 @@ if (fs.existsSync(buildInfoPath)) {
       }
       // คำนวณค่าที่ควรจะเป็นจาก "ต้นฉบับปัจจุบัน" เสมอ
       // จึงจับได้ทั้งการแก้ไฟล์ปลายทางโดยตรง และการแก้ต้นฉบับแล้วลืม build
-      const expected = expectedHash(fs.readFileSync(srcFile, 'utf8'), rel);
+      const expected = expectedHash(fs.readFileSync(srcFile), rel);
       const copyHash = crypto.createHash('sha1').update(fs.readFileSync(copyFile)).digest('hex').slice(0, 12);
       if (copyHash !== expected) stale.push(rel);
     }

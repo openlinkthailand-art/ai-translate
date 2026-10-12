@@ -108,7 +108,22 @@
     }
   }
 
+  /** @font-face ใน Shadow DOM ใช้ไม่ได้ จึงฝังฟอนต์ Sarabun ที่ระดับเอกสาร (ถ้าเว็บนั้นบล็อกด้วย CSP จะใช้ฟอนต์สำรองแทน) */
+  function ensureFont() {
+    if (document.getElementById('atthai-font')) return;
+    try {
+      const link = document.createElement('link');
+      link.id = 'atthai-font';
+      link.rel = 'stylesheet';
+      link.href = chrome.runtime.getURL('src/ui/fonts/sarabun.css');
+      (document.head || document.documentElement).appendChild(link);
+    } catch {
+      /* ใช้ฟอนต์สำรอง */
+    }
+  }
+
   function getCard() {
+    ensureFont();
     if (S.card) return S.card;
     S.card = new S.cardMod.TranslateCard({ bridge: makeBridge(), settings: S.settings, host: document.documentElement });
     return S.card;
@@ -281,18 +296,19 @@
   function showPill(rect, text) {
     if (!rect) return;
     hidePill();
+    ensureFont();
     const host = document.createElement('div');
     host.id = 'atthai-pill';
     host.style.cssText = 'position:fixed;z-index:2147483644;top:0;left:0;';
     const shadow = host.attachShadow({ mode: 'open' });
     const dark =
-      S.settings?.general?.theme === 'dark' ||
-      (S.settings?.general?.theme !== 'light' && window.matchMedia?.('(prefers-color-scheme: dark)').matches);
+      ['dark', 'night'].includes(S.settings?.general?.theme) ||
+      (S.settings?.general?.theme === 'auto' && window.matchMedia?.('(prefers-color-scheme: dark)').matches);
     shadow.innerHTML = `
       <style>
         :host { all: initial; }
         button {
-          font-family: "Noto Sans Thai","Sarabun","Leelawadee UI","Segoe UI",system-ui,sans-serif;
+          font-family: "Sarabun","Noto Sans Thai","Leelawadee UI","Segoe UI",system-ui,sans-serif;
           display: inline-flex; align-items: center; gap: 6px;
           padding: 6px 12px; border-radius: 999px; cursor: pointer;
           border: 1px solid ${dark ? '#2c323d' : '#d7dbe3'};

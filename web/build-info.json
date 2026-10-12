@@ -1,151 +1,247 @@
 {
   "version": "1.0.0",
-  "builtAt": "2026-10-04T10:37:42.170Z",
-  "copied": 212,
+  "builtAt": "2026-10-12T07:22:18.982Z",
+  "copied": 228,
   "files": {
     "common/constants.js": {
-      "src": "edc806dccd8f",
-      "expected": "edc806dccd8f",
+      "src": "0548e950fff7",
+      "expected": "0548e950fff7",
       "transform": "",
-      "copy": "edc806dccd8f"
+      "copy": "0548e950fff7"
     },
     "common/platform.js": {
-      "src": "2672561e33c8",
-      "expected": "2672561e33c8",
+      "src": "de4dcc14955f",
+      "expected": "de4dcc14955f",
       "transform": "",
-      "copy": "2672561e33c8"
+      "copy": "de4dcc14955f"
     },
     "common/settings.js": {
-      "src": "1892ddf05367",
-      "expected": "1892ddf05367",
+      "src": "d6c990ab03f1",
+      "expected": "d6c990ab03f1",
       "transform": "",
-      "copy": "1892ddf05367"
+      "copy": "d6c990ab03f1"
     },
     "common/util.js": {
-      "src": "6e1c100e23f0",
-      "expected": "6e1c100e23f0",
+      "src": "bad271f13252",
+      "expected": "bad271f13252",
       "transform": "",
-      "copy": "6e1c100e23f0"
+      "copy": "bad271f13252"
     },
     "core/ai.js": {
-      "src": "2818d4ca19c3",
-      "expected": "2818d4ca19c3",
+      "src": "b3adab49cbe3",
+      "expected": "b3adab49cbe3",
       "transform": "",
-      "copy": "2818d4ca19c3"
+      "copy": "b3adab49cbe3"
     },
     "core/cache.js": {
-      "src": "bfa039bd0ed2",
-      "expected": "bfa039bd0ed2",
+      "src": "746552b61b94",
+      "expected": "746552b61b94",
       "transform": "",
-      "copy": "bfa039bd0ed2"
+      "copy": "746552b61b94"
     },
     "core/db.js": {
-      "src": "29d5755227cd",
-      "expected": "29d5755227cd",
+      "src": "e8de0c21a3d4",
+      "expected": "e8de0c21a3d4",
       "transform": "",
-      "copy": "29d5755227cd"
+      "copy": "e8de0c21a3d4"
     },
     "core/dictionary.js": {
-      "src": "d6e41b7cc9f3",
-      "expected": "d6e41b7cc9f3",
+      "src": "ca8176b821b0",
+      "expected": "ca8176b821b0",
       "transform": "",
-      "copy": "d6e41b7cc9f3"
+      "copy": "ca8176b821b0"
     },
     "core/providers.js": {
-      "src": "d493e9174d27",
-      "expected": "d493e9174d27",
+      "src": "c38ae4e5911d",
+      "expected": "c38ae4e5911d",
       "transform": "",
-      "copy": "d493e9174d27"
+      "copy": "c38ae4e5911d"
     },
     "core/router.js": {
-      "src": "1ae3f68460a3",
-      "expected": "1ae3f68460a3",
+      "src": "1b08b2cc43d8",
+      "expected": "1b08b2cc43d8",
       "transform": "",
-      "copy": "1ae3f68460a3"
+      "copy": "1b08b2cc43d8"
     },
     "core/translate-service.js": {
-      "src": "a9471c7ca382",
-      "expected": "a9471c7ca382",
+      "src": "3d328e1268dc",
+      "expected": "3d328e1268dc",
       "transform": "",
-      "copy": "a9471c7ca382"
+      "copy": "3d328e1268dc"
     },
     "ui/api.js": {
-      "src": "bdc27ec92e16",
-      "expected": "bdc27ec92e16",
+      "src": "9fc630c4ad8b",
+      "expected": "9fc630c4ad8b",
       "transform": "",
-      "copy": "bdc27ec92e16"
+      "copy": "9fc630c4ad8b"
     },
     "ui/card-style.js": {
-      "src": "2a794805486d",
-      "expected": "2a794805486d",
+      "src": "51c141f8e5e9",
+      "expected": "51c141f8e5e9",
       "transform": "",
-      "copy": "2a794805486d"
+      "copy": "51c141f8e5e9"
     },
     "ui/card.js": {
-      "src": "b3eefaad8d65",
-      "expected": "b3eefaad8d65",
+      "src": "eb9d2eecd46c",
+      "expected": "eb9d2eecd46c",
       "transform": "",
-      "copy": "b3eefaad8d65"
+      "copy": "eb9d2eecd46c"
+    },
+    "ui/fonts/sarabun-latin-400.woff2": {
+      "src": "f14b93137fa8",
+      "expected": "f14b93137fa8",
+      "transform": "",
+      "copy": "f14b93137fa8"
+    },
+    "ui/fonts/sarabun-latin-500.woff2": {
+      "src": "dd49cf3c877e",
+      "expected": "dd49cf3c877e",
+      "transform": "",
+      "copy": "dd49cf3c877e"
+    },
+    "ui/fonts/sarabun-latin-600.woff2": {
+      "src": "121ca6f5e47e",
+      "expected": "121ca6f5e47e",
+      "transform": "",
+      "copy": "121ca6f5e47e"
+    },
+    "ui/fonts/sarabun-latin-700.woff2": {
+      "src": "1fc160e2cb80",
+      "expected": "1fc160e2cb80",
+      "transform": "",
+      "copy": "1fc160e2cb80"
+    },
+    "ui/fonts/sarabun-latin-800.woff2": {
+      "src": "c843f7ee924d",
+      "expected": "c843f7ee924d",
+      "transform": "",
+      "copy": "c843f7ee924d"
+    },
+    "ui/fonts/sarabun-latin-ext-400.woff2": {
+      "src": "d980e0fe40ce",
+      "expected": "d980e0fe40ce",
+      "transform": "",
+      "copy": "d980e0fe40ce"
+    },
+    "ui/fonts/sarabun-latin-ext-500.woff2": {
+      "src": "5236e7e1ba01",
+      "expected": "5236e7e1ba01",
+      "transform": "",
+      "copy": "5236e7e1ba01"
+    },
+    "ui/fonts/sarabun-latin-ext-600.woff2": {
+      "src": "40d10b7c6591",
+      "expected": "40d10b7c6591",
+      "transform": "",
+      "copy": "40d10b7c6591"
+    },
+    "ui/fonts/sarabun-latin-ext-700.woff2": {
+      "src": "48e3498379cd",
+      "expected": "48e3498379cd",
+      "transform": "",
+      "copy": "48e3498379cd"
+    },
+    "ui/fonts/sarabun-latin-ext-800.woff2": {
+      "src": "5b684403affb",
+      "expected": "5b684403affb",
+      "transform": "",
+      "copy": "5b684403affb"
+    },
+    "ui/fonts/sarabun-thai-400.woff2": {
+      "src": "04e7185bf7f4",
+      "expected": "04e7185bf7f4",
+      "transform": "",
+      "copy": "04e7185bf7f4"
+    },
+    "ui/fonts/sarabun-thai-500.woff2": {
+      "src": "7879f547dd91",
+      "expected": "7879f547dd91",
+      "transform": "",
+      "copy": "7879f547dd91"
+    },
+    "ui/fonts/sarabun-thai-600.woff2": {
+      "src": "09a6006ee0d3",
+      "expected": "09a6006ee0d3",
+      "transform": "",
+      "copy": "09a6006ee0d3"
+    },
+    "ui/fonts/sarabun-thai-700.woff2": {
+      "src": "dcf9d6636025",
+      "expected": "dcf9d6636025",
+      "transform": "",
+      "copy": "dcf9d6636025"
+    },
+    "ui/fonts/sarabun-thai-800.woff2": {
+      "src": "f55f308bddd9",
+      "expected": "f55f308bddd9",
+      "transform": "",
+      "copy": "f55f308bddd9"
+    },
+    "ui/fonts/sarabun.css": {
+      "src": "3cf20c03548e",
+      "expected": "3cf20c03548e",
+      "transform": "",
+      "copy": "3cf20c03548e"
     },
     "ui/pages.css": {
-      "src": "514999bd5d0a",
-      "expected": "514999bd5d0a",
+      "src": "9af7dd0ee815",
+      "expected": "9af7dd0ee815",
       "transform": "",
-      "copy": "514999bd5d0a"
+      "copy": "9af7dd0ee815"
     },
     "viewer/viewer.css": {
-      "src": "f5da312a8abb",
-      "expected": "f5da312a8abb",
+      "src": "e6905191b527",
+      "expected": "e6905191b527",
       "transform": "",
-      "copy": "f5da312a8abb"
+      "copy": "e6905191b527"
     },
     "viewer/viewer.html": {
-      "src": "d7a949be14d3",
-      "expected": "01f00e5c4b49",
+      "src": "203a4888757c",
+      "expected": "a688d6a7a207",
       "transform": "inject-icons-v1",
-      "copy": "01f00e5c4b49"
+      "copy": "a688d6a7a207"
     },
     "viewer/viewer.js": {
-      "src": "e9ee3cf89b1f",
-      "expected": "e9ee3cf89b1f",
+      "src": "14740faa4c3b",
+      "expected": "14740faa4c3b",
       "transform": "",
-      "copy": "e9ee3cf89b1f"
+      "copy": "14740faa4c3b"
     },
     "library/library.html": {
-      "src": "3f48bc47b36a",
-      "expected": "7e066bb60a0b",
+      "src": "208a077251cb",
+      "expected": "8aef2883e600",
       "transform": "inject-icons-v1",
-      "copy": "7e066bb60a0b"
+      "copy": "8aef2883e600"
     },
     "library/library.js": {
-      "src": "639fed9e60fb",
-      "expected": "639fed9e60fb",
+      "src": "e106b2b85232",
+      "expected": "e106b2b85232",
       "transform": "",
-      "copy": "639fed9e60fb"
+      "copy": "e106b2b85232"
     },
     "review/review.html": {
-      "src": "e2468db3831d",
-      "expected": "c99992b2c311",
+      "src": "bd7df35985e6",
+      "expected": "0927dc220def",
       "transform": "inject-icons-v1",
-      "copy": "c99992b2c311"
+      "copy": "0927dc220def"
     },
     "review/review.js": {
-      "src": "be3df54b2eac",
-      "expected": "be3df54b2eac",
+      "src": "91db050e8074",
+      "expected": "91db050e8074",
       "transform": "",
-      "copy": "be3df54b2eac"
+      "copy": "91db050e8074"
     },
     "options/options.html": {
-      "src": "170ff9106ce2",
-      "expected": "1d313e2180d1",
+      "src": "bd6837928260",
+      "expected": "2845c6064be5",
       "transform": "inject-icons-v1",
-      "copy": "1d313e2180d1"
+      "copy": "2845c6064be5"
     },
     "options/options.js": {
-      "src": "d7b24a2d7a13",
-      "expected": "d7b24a2d7a13",
+      "src": "4c4e9175d039",
+      "expected": "4c4e9175d039",
       "transform": "",
-      "copy": "d7b24a2d7a13"
+      "copy": "4c4e9175d039"
     }
   }
 }

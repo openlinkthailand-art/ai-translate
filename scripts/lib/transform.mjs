@@ -34,7 +34,8 @@ export function transformHtml(content, relPath) {
 /** ค่าแฮชของไฟล์ปลายทางที่ควรจะเป็น (หลังแปลงแล้ว) */
 export function expectedHash(content, relPath) {
   const id = transformIdFor(relPath);
-  const finalContent = id ? transformHtml(content, relPath) : content;
+  // content อาจเป็น Buffer (ไฟล์ไบนารี เช่นฟอนต์) — แปลงเป็นข้อความเฉพาะไฟล์ที่ต้อง transform
+  const finalContent = id ? transformHtml(content.toString('utf8'), relPath) : content;
   return crypto.createHash('sha1').update(finalContent).digest('hex').slice(0, 12);
 }
 

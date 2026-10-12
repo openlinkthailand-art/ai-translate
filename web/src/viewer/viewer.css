@@ -1,4 +1,5 @@
 /* โหมดอ่าน PDF — ธีมมืดเป็นหลักเพื่อถนอมสายตาเวลาอ่านนาน ๆ */
+@import url("../ui/fonts/sarabun.css");
 :root {
   --bg: #14161b;
   --bg-soft: #1b1e25;
@@ -21,6 +22,28 @@
   --accent: #0f766e;
   --accent-fg: #ffffff;
 }
+:root[data-theme="sepia"] {
+  --bg: #e9dfc6;
+  --bg-soft: #fbf6e9;
+  --bg-elev: #f1e7cf;
+  --fg: #3b2f20;
+  --fg-muted: #6f5f45;
+  --border: #d9caa5;
+  --accent: #0f766e;
+  --accent-fg: #ffffff;
+  --danger: #a51c1c;
+}
+:root[data-theme="night"] {
+  --bg: #000000;
+  --bg-soft: #0c0d0f;
+  --bg-elev: #15171a;
+  --fg: #cfd4dc;
+  --fg-muted: #8b929d;
+  --border: #23262b;
+  --accent: #5eb8ae;
+  --accent-fg: #001a17;
+  --danger: #e67c7c;
+}
 
 * { box-sizing: border-box; }
 /* สำคัญ: คลาสที่มี display กำหนดไว้จะทับ attribute hidden ทำให้ overlay ที่ซ่อนอยู่ยังบล็อกการคลิก */
@@ -29,7 +52,7 @@ html, body { margin: 0; height: 100%; }
 body {
   background: var(--bg);
   color: var(--fg);
-  font-family: "Noto Sans Thai", "Sarabun", "Leelawadee UI", "Segoe UI", system-ui, sans-serif;
+  font-family: "Sarabun", "Noto Sans Thai", "Leelawadee UI", "Segoe UI", system-ui, sans-serif;
   font-size: 14px;
   overflow: hidden;
 }
@@ -117,6 +140,12 @@ body {
   border-radius: 3px; overflow: hidden;
 }
 .page canvas { display: block; }
+/* ย้อมสีหน้า PDF ให้เข้ากับธีม: กระดาษ = พื้นขาวกลายเป็นเหลืองอ่อน (multiply ทำให้ตัวอักษรยังเข้มเท่าเดิม),
+   กลางคืน = กลับสีเป็นพื้นเข้มตัวอักษรอ่อน (รูปภาพจะกลับสีด้วย) */
+:root[data-theme="sepia"] .page { background: #f6eedb; }
+:root[data-theme="sepia"] .page canvas { mix-blend-mode: multiply; }
+:root[data-theme="night"] .page canvas { filter: invert(.86) hue-rotate(180deg); }
+:root[data-theme="night"] .page { background: #242424; box-shadow: none; }
 .page-loading {
   position: absolute; inset: 0; display: grid; place-items: center;
   color: #8892a4; font-size: 12px; background: #fafbfc;

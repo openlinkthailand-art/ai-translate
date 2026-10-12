@@ -3,7 +3,7 @@
  * จุดเด่น: เลือกข้อความ/ดับเบิลคลิกเพื่อแปลได้เหมือนหน้าเว็บ + แปลทั้งหน้าได้
  */
 import { TranslateCard } from '../ui/card.js';
-import { cleanWord, pickContext, hashKey, truncate } from '../common/util.js';
+import { cleanWord, pickContext, hashKey, truncate, resolveTheme } from '../common/util.js';
 import { MSG } from '../common/constants.js';
 import { getSettings } from '../common/settings.js';
 import { getPlatform } from '../common/platform.js';
@@ -90,9 +90,7 @@ async function init() {
 }
 
 function applyTheme() {
-  const pref = state.settings?.general?.theme || 'auto';
-  const dark = pref === 'dark' || (pref === 'auto' && window.matchMedia?.('(prefers-color-scheme: dark)').matches);
-  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', resolveTheme(state.settings?.general?.theme));
 }
 
 function makeBridge() {
@@ -577,7 +575,7 @@ function bindSelection() {
     const shadow = pillHost.attachShadow({ mode: 'open' });
     shadow.innerHTML = `<style>
       :host{all:initial}
-      button{font-family:"Noto Sans Thai","Sarabun","Segoe UI",system-ui,sans-serif;display:inline-flex;align-items:center;gap:6px;
+      button{font-family:"Sarabun","Noto Sans Thai","Segoe UI",system-ui,sans-serif;display:inline-flex;align-items:center;gap:6px;
       padding:${touch ? '10px 18px' : '6px 12px'};border-radius:999px;cursor:pointer;border:1px solid var(--border,#2c323d);background:var(--bg-elev,#22262f);
       color:var(--fg,#e8ecf3);font-size:${touch ? '15px' : '13px'};font-weight:600;line-height:1;box-shadow:0 6px 18px rgba(0,0,0,.3)}
       button:hover{border-color:#2dd4bf;color:#2dd4bf}

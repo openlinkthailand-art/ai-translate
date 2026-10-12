@@ -20,7 +20,13 @@ const PROVIDERS = [
 const SCHEMA = {
   general: [
     { path: 'general.enabled', type: 'bool', title: 'เปิดใช้งานส่วนขยาย', hint: 'ปิดได้เมื่ออยากอ่านแบบไม่ถูกรบกวน', extOnly: true },
-    { path: 'general.theme', type: 'select', title: 'ธีม', options: [['auto', 'ตามระบบ'], ['light', 'สว่าง'], ['dark', 'มืด']] },
+    {
+      path: 'general.theme',
+      type: 'select',
+      title: 'ธีมการอ่าน',
+      hint: 'กระดาษ (เหลืองอ่อน) ลดแสงจ้าเวลาอ่านนาน · กลางคืน (ดำสนิท) สำหรับห้องมืดและจอ OLED',
+      options: [['auto', 'ตามระบบ (สว่าง/มืด)'], ['light', 'สว่าง'], ['sepia', 'กระดาษ (เหลืองอ่อน)'], ['dark', 'มืด'], ['night', 'กลางคืน (ดำสนิท)']],
+    },
     { path: 'lookup.doubleClick', type: 'bool', title: 'ดับเบิลคลิกเพื่อแปลคำ', hint: 'วิธีที่เร็วที่สุดสำหรับอ่านหนังสือ', extOnly: true },
     { path: 'lookup.selectionButton', type: 'bool', title: 'แสดงปุ่มลอยเมื่อคลุมข้อความ', hint: 'คลุมประโยคแล้วกดปุ่ม 🌐 แปล', extOnly: true },
     { path: 'lookup.closeOnOutsideClick', type: 'bool', title: 'ปิดการ์ดเมื่อคลิกที่อื่น', extOnly: true },

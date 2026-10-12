@@ -48,6 +48,7 @@ function createWindow() {
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true,
+      preload: path.join(__dirname, 'preload.js'),
       // หน้าต่างนี้โหลดเฉพาะเนื้อหาของแอปเอง (app://) — ปิดข้อจำกัด CORS เพื่อให้เรียก API แปลได้เหมือนส่วนขยาย
       webSecurity: false,
     },
@@ -64,6 +65,9 @@ function createWindow() {
       if (/^https?:/i.test(url)) shell.openExternal(url);
     }
   });
+
+  // ซูมด้วยการถ่างนิ้วบนจอสัมผัส (Ctrl+ล้อเมาส์ทำใน preload.js)
+  win.webContents.setVisualZoomLevelLimits(1, 3);
 
   win.on('close', (event) => {
     if (quitting) return;

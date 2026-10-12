@@ -1,5 +1,6 @@
 /** ตัวช่วยที่หน้าเว็บของส่วนขยายและหน้าเว็บของ PWA ใช้ร่วมกัน */
 import { getPlatform } from '../common/platform.js';
+import { resolveTheme } from '../common/util.js';
 
 /** ส่งคำสั่งไปยัง router กลาง (ส่วนขยายส่งผ่าน service worker, เว็บแอปเรียกตรง) */
 export function send(message) {
@@ -14,12 +15,14 @@ export async function setSettings(patch) {
   return send({ type: 'setSettings', patch });
 }
 
+/** สีแถบบนของมือถือ (meta theme-color) ให้กลมกลืนกับแต่ละธีม */
+const THEME_BAR_COLOR = { light: '#0f766e', sepia: '#f4ecd8', dark: '#14161b', night: '#000000' };
+
 export function applyTheme(settings) {
-  const pref = settings?.general?.theme || 'auto';
-  const dark = pref === 'dark' || (pref === 'auto' && window.matchMedia?.('(prefers-color-scheme: dark)').matches);
-  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  const theme = resolveTheme(settings?.general?.theme);
+  document.documentElement.setAttribute('data-theme', theme);
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute('content', dark ? '#14161b' : '#0f766e');
+  if (meta) meta.setAttribute('content', THEME_BAR_COLOR[theme]);
 }
 
 export function toast(message, ms = 1800) {

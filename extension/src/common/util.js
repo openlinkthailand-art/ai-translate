@@ -120,6 +120,16 @@ export function clamp(v, min, max) {
   return Math.min(max, Math.max(min, v));
 }
 
+/** ธีมการอ่านที่มีให้เลือก — 'auto' จะเลือก light/dark ตามระบบ */
+export const READING_THEMES = ['light', 'sepia', 'dark', 'night'];
+
+/** แปลงค่าที่ผู้ใช้ตั้ง (รวม 'auto') เป็นธีมที่ใช้จริง */
+export function resolveTheme(pref) {
+  if (READING_THEMES.includes(pref)) return pref;
+  const dark = typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+  return dark ? 'dark' : 'light';
+}
+
 /** เลือกประโยคที่มีคำเป้าหมายอยู่ในนั้น (ใช้ยกประโยคที่ผู้ใช้อ่านเป็นตัวอย่าง) */
 export function pickSentenceWith(text, needle) {
   const sentences = splitSentences(text);

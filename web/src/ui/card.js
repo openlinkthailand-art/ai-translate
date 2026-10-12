@@ -3,7 +3,7 @@
  * ไม่ผูกกับ chrome.* โดยตรง แต่รับ "bridge" เข้ามา เพื่อให้ทดสอบ/ใช้ซ้ำได้
  */
 import { CARD_CSS } from './card-style.js';
-import { escapeHtml, truncate } from '../common/util.js';
+import { escapeHtml, truncate, resolveTheme } from '../common/util.js';
 import { LEVEL_LABEL } from '../common/constants.js';
 
 const LEVEL_ORDER = ['easy', 'normal', 'advanced'];
@@ -80,9 +80,7 @@ export class TranslateCard {
   }
 
   _applyTheme() {
-    const pref = this.settings?.general?.theme || 'auto';
-    const dark = pref === 'dark' || (pref === 'auto' && window.matchMedia?.('(prefers-color-scheme: dark)').matches);
-    this.card.setAttribute('data-theme', dark ? 'dark' : 'light');
+    this.card.setAttribute('data-theme', resolveTheme(this.settings?.general?.theme));
   }
 
   applySettings(settings) {

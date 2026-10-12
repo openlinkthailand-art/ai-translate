@@ -17,7 +17,7 @@
     "appId": "th.openlink.atthai",
     "productName": "AtThai Reader",
     "directories": { "output": "dist" },
-    "files": ["main.js", "package.json"],
+    "files": ["main.js", "preload.js", "package.json"],
     "extraResources": [
       { "from": "../web", "to": "web" },
       { "from": "copy-selection.ps1", "to": "copy-selection.ps1" }

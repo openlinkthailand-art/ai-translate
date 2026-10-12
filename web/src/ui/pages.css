@@ -1,4 +1,5 @@
 /* สไตล์ร่วมของหน้า popup / ตั้งค่า / คลังคำศัพท์ / ทบทวน */
+@import url("fonts/sarabun.css");
 :root {
   --bg: #f4f5f8;
   --panel: #ffffff;
@@ -32,6 +33,40 @@
   --ok: #6ee7b7;
   --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.28);
 }
+/* กระดาษ (เหลืองอ่อน) — ลดแสงสีฟ้าและความจ้าของพื้นขาวเวลาอ่านนาน ๆ */
+:root[data-theme="sepia"] {
+  --bg: #f4ecd8;
+  --panel: #fbf6e9;
+  --panel-2: #f1e7cf;
+  --fg: #3b2f20;
+  --fg-muted: #6f5f45;
+  --border: #e2d5b5;
+  --accent: #0f766e;
+  --accent-2: #14b8a6;
+  --accent-fg: #ffffff;
+  --accent-soft: #e4ead3;
+  --warn: #9a4a07;
+  --danger: #a51c1c;
+  --ok: #04694d;
+  --shadow: 0 1px 2px rgba(80, 60, 20, .06), 0 6px 20px rgba(80, 60, 20, .08);
+}
+/* กลางคืน (ดำสนิท) — สำหรับห้องมืดและจอ OLED ตัวอักษรไม่ขาวจัดเพื่อลดแสงบาดตา */
+:root[data-theme="night"] {
+  --bg: #000000;
+  --panel: #0c0d0f;
+  --panel-2: #15171a;
+  --fg: #cfd4dc;
+  --fg-muted: #8b929d;
+  --border: #23262b;
+  --accent: #5eb8ae;
+  --accent-2: #7fcfc6;
+  --accent-fg: #001a17;
+  --accent-soft: #0f2623;
+  --warn: #e0b04a;
+  --danger: #e67c7c;
+  --ok: #6fcfa8;
+  --shadow: none;
+}
 
 * { box-sizing: border-box; }
 /* กันไม่ให้ CSS display ทับ attribute hidden */
@@ -40,7 +75,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--fg);
-  font-family: "Noto Sans Thai", "Sarabun", "Leelawadee UI", "Segoe UI", system-ui, sans-serif;
+  font-family: "Sarabun", "Noto Sans Thai", "Leelawadee UI", "Segoe UI", system-ui, sans-serif;
   font-size: 14px;
   line-height: 1.6;
 }

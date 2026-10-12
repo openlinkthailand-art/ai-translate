@@ -3,7 +3,8 @@
   "appName": "อ่านไทย",
   "webDir": "../web",
   "android": {
-    "allowMixedContent": false
+    "allowMixedContent": false,
+    "zoomEnabled": true
   },
   "server": {
     "androidScheme": "https"
