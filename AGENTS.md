@@ -42,7 +42,8 @@ npm run build:web   # ประกอบ web/ จาก extension/src — ต้
 npm run smoke       # ยิง API จริง 43 การทดสอบ (ต้องมีเน็ต)
 npm run e2e         # โหลดส่วนขยายเข้า Chromium จริง 31 การทดสอบ
 npm run e2e:web     # ทดสอบเว็บแอปโหมดมือถือ (Pixel 5) 43 การทดสอบ
-npm run verify      # รันทั้งหมดตามลำดับ (117 การทดสอบ)
+npm run e2e:reader  # โหมดอ่านใน viewer: ตัวแยกย่อหน้า 13 + Chromium จริง 24 การทดสอบ
+npm run verify      # รันทั้งหมดตามลำดับ (153 การทดสอบ)
 npm run package     # แพ็ก dist/atthai-translate-reader-*.zip และ dist/atthai-web-*.zip
 ```
 

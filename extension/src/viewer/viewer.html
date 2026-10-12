@@ -21,6 +21,10 @@
     </div>
 
     <div class="tb-group">
+      <button id="btn-reader" class="tb-btn tb-toggle" title="อ่านเป็นข้อความ: ปรับขนาดตัวอักษร แปลคู่ทีละย่อหน้า สรุปด้วย AI">📖 โหมดอ่าน</button>
+    </div>
+
+    <div class="tb-group tb-pdf-only">
       <button id="btn-zoom-out" class="tb-btn" title="ย่อ (−)">−</button>
       <span id="zoom-label" class="tb-label">100%</span>
       <button id="btn-zoom-in" class="tb-btn" title="ขยาย (+)">+</button>
@@ -31,7 +35,7 @@
       <button id="btn-sidebar" class="tb-btn tb-toggle" title="สารบัญ/ภาพย่อ">☰</button>
       <button id="btn-search" class="tb-btn tb-toggle" title="ค้นหาในไฟล์ (Ctrl+F)">🔍</button>
       <button id="btn-translate-page" class="tb-btn" title="แปลทั้งหน้าเป็นไทย">🌐 แปลหน้านี้</button>
-      <button id="btn-rotate" class="tb-btn" title="หมุนหน้า">⟳</button>
+      <button id="btn-rotate" class="tb-btn tb-pdf-only" title="หมุนหน้า">⟳</button>
     </div>
 
     <div class="tb-spacer"></div>
@@ -63,6 +67,61 @@
 
     <main id="viewport" class="viewport">
       <div id="pages" class="pages"></div>
+
+      <!-- โหมดอ่าน: ข้อความของหน้าปัจจุบันจัดเป็นย่อหน้า ปรับตัวอักษรได้ -->
+      <section id="reader" class="reader" hidden>
+        <div class="rd-bar">
+          <button id="rd-settings-btn" class="tb-btn" aria-expanded="false" title="ขนาดตัวอักษร ระยะบรรทัด ความกว้าง">Aa</button>
+          <button id="rd-bilingual" class="tb-btn" aria-pressed="false" title="แสดงคำแปลไทยใต้ทุกย่อหน้า">แปลคู่</button>
+          <button id="rd-ruler" class="tb-btn" aria-pressed="false" title="แถบช่วยไล่บรรทัด (ตามเมาส์หรือจุดที่แตะ)">แถบบรรทัด</button>
+          <button id="rd-digest" class="tb-btn" title="ให้ AI สรุปหน้านี้และถามคำถามเช็กความเข้าใจ">🧠 สรุป + คำถาม</button>
+        </div>
+
+        <div id="rd-settings" class="rd-settings" hidden>
+          <div class="rd-row">
+            <span class="tb-label">ขนาดตัวอักษร</span>
+            <div class="rd-seg">
+              <button data-key="fontSize" data-value="16">เล็ก</button>
+              <button data-key="fontSize" data-value="18">กลาง</button>
+              <button data-key="fontSize" data-value="20">ใหญ่</button>
+              <button data-key="fontSize" data-value="23">ใหญ่มาก</button>
+            </div>
+          </div>
+          <div class="rd-row">
+            <span class="tb-label">ระยะบรรทัด</span>
+            <div class="rd-seg">
+              <button data-key="lineHeight" data-value="1.6">ชิด</button>
+              <button data-key="lineHeight" data-value="1.8">ปกติ</button>
+              <button data-key="lineHeight" data-value="2.1">ห่าง</button>
+            </div>
+          </div>
+          <div class="rd-row">
+            <span class="tb-label">ความกว้างข้อความ</span>
+            <div class="rd-seg">
+              <button data-key="width" data-value="narrow">แคบ</button>
+              <button data-key="width" data-value="medium">กลาง</button>
+              <button data-key="width" data-value="wide">กว้าง</button>
+            </div>
+          </div>
+          <label class="rd-row rd-check">
+            <input id="rd-highlight" type="checkbox" />
+            <span>ไฮไลต์คำที่อยู่ในคลังคำศัพท์ (แตะเพื่อดูความหมาย)</span>
+          </label>
+        </div>
+
+        <div id="rd-digest-box" class="rd-digest" hidden></div>
+
+        <article id="rd-article" class="rd-article">
+          <div id="rd-ruler-band" class="rd-ruler-band" hidden></div>
+          <div id="rd-content"></div>
+        </article>
+
+        <nav class="rd-nav">
+          <button id="rd-prev" class="tb-btn">← หน้าก่อน</button>
+          <span id="rd-page" class="tb-label"></span>
+          <button id="rd-next" class="tb-btn tb-primary">หน้าถัดไป →</button>
+        </nav>
+      </section>
       <div id="dropzone" class="dropzone" hidden>
         <div class="dz-box">
           <div class="dz-icon">📄</div>

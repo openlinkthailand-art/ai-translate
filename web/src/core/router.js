@@ -24,7 +24,8 @@ export async function handleMessage(msg, ctx = {}) {
         mode: msg.mode || 'auto',
         forceRefresh: !!msg.forceRefresh,
       });
-      if (settings.library?.autoSave && (result.query || '').length > 1) {
+      // noSave: ใช้กับการแปลทั้งย่อหน้า/ทั้งหน้า ซึ่งไม่ใช่ "คำศัพท์" ที่ควรเข้าคลัง
+      if (settings.library?.autoSave && !msg.noSave && (result.query || '').length > 1) {
         try {
           const { entry, created } = await db.addWord(
             db.makeWordEntry(result, {
@@ -120,6 +121,21 @@ export async function handleMessage(msg, ctx = {}) {
 
     case MSG.CLEAR_CACHE:
       return { removed: await cache.clearCache() };
+
+    case MSG.AI_DIGEST: {
+      const settings = await getSettings();
+      if (!settings.ai?.enabled) throw new Error('ฟีเจอร์นี้ใช้ AI — เปิด "AI ช่วยอธิบาย" ในหน้าตั้งค่าก่อน');
+      const text = String(msg.text || '').trim();
+      if (text.length < 40) throw new Error('ข้อความในหน้านี้สั้นเกินไปที่จะสรุป');
+      const key = cache.cacheKey(['digest:v1', text.slice(0, 6000), settings.ai.provider, settings.ai.model]);
+      const hit = await cache.cacheGet(key);
+      if (hit) return { ...hit, cached: true };
+      const { aiDigest } = await import('./ai.js');
+      const result = await aiDigest({ settings, text });
+      if (!result.summary.length && !result.quiz.length) throw new Error('AI ตอบกลับในรูปแบบที่อ่านไม่ได้ — ลองกดใหม่อีกครั้ง');
+      await cache.cacheSet(key, result);
+      return result;
+    }
 
     case MSG.GET_PAGE_INFO:
       return { url: ctx.url || '', title: ctx.title || '' };

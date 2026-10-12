@@ -7,6 +7,7 @@ import { cleanWord, pickContext, hashKey, truncate, resolveTheme } from '../comm
 import { MSG } from '../common/constants.js';
 import { getSettings } from '../common/settings.js';
 import { getPlatform } from '../common/platform.js';
+import { Reader } from './reader.js';
 
 const pdfjsLib = window.pdfjsLib;
 /** ค่าที่แต่ละสภาพแวดล้อมกำหนดเอง (ที่อยู่ไฟล์ pdf.js) — ดู src/viewer/config.js ของแต่ละที่ */
@@ -73,6 +74,24 @@ async function init() {
     settings: state.settings,
     host: document.documentElement,
   });
+  state.reader = new Reader({
+    state,
+    viewport: ui.viewport,
+    send,
+    lookup: (word, context, rect) =>
+      state.card.lookup(word, { context: pickContext(context, word, state.settings?.lookup?.maxContextChars || 700), sourceType: 'pdf', rect }),
+    goToPage: (n) => goToPage(n),
+    onToggle: (open) => {
+      ui.pages.hidden = open;
+      el('btn-reader').classList.toggle('is-active', open);
+      if (!open) {
+        // จำหน้าไว้ก่อน: buildPlaceholders() คำนวณหน้าปัจจุบันใหม่จากตำแหน่งเลื่อน (ซึ่งอยู่บนสุดหลังโหมดอ่าน)
+        const page = state.currentPage;
+        buildPlaceholders();
+        goToPage(page, false);
+      }
+    },
+  });
   bindToolbar();
   bindSelection();
   bindKeys();
@@ -130,6 +149,7 @@ async function loadDocument(url, restorePage = null) {
     state.numPages = doc.numPages;
     state.rendered.clear();
     state.pageText.clear();
+    state.reader.reset();
 
     const info = await doc.getMetadata().catch(() => null);
     if (!state.title) state.title = info?.info?.Title || decodeURIComponent(url.split('/').pop() || 'เอกสาร');
@@ -154,6 +174,7 @@ async function loadDocument(url, restorePage = null) {
       buildPlaceholders();
       await goToPage(saved.page || 1, false);
     }
+    if (state.settings?.reader?.active) await state.reader.open();
   } catch (err) {
     hideLoading();
     showError(err?.message || String(err));
@@ -249,7 +270,7 @@ function onViewportScroll() {
 }
 
 function updateVisiblePages() {
-  if (!state.numPages) return;
+  if (!state.numPages || state.reader.isOpen) return;
   const rect = ui.viewport.getBoundingClientRect();
   const mid = rect.top + rect.height / 2;
   let current = state.currentPage;
@@ -324,6 +345,11 @@ async function goToPage(n, smooth = true) {
   const page = Math.max(1, Math.min(Number(n) || 1, state.numPages || 1));
   state.currentPage = page;
   ui.pageInput.value = String(page);
+  if (state.reader.isOpen) {
+    await state.reader.show(page);
+    savePositionDebounced();
+    return;
+  }
   const pageDiv = ui.pages.querySelector(`.page[data-page="${page}"]`);
   if (pageDiv) {
     ui.viewport.scrollTo({ top: pageDiv.offsetTop - 12, behavior: smooth ? 'smooth' : 'auto' });
@@ -543,10 +569,12 @@ function bindSelection() {
     return { text, rect, node, pageNo };
   };
 
-  /** บริบทใน PDF = ข้อความใน "บรรทัดเดียวกัน" ของคำที่เลือก (ไม่ใช่ทั้งหน้า) */
+  /** บริบทใน PDF = ข้อความใน "บรรทัดเดียวกัน" ของคำที่เลือก (ไม่ใช่ทั้งหน้า) — ในโหมดอ่านใช้ทั้งย่อหน้า */
   const contextFor = (info) => {
     const maxChars = state.settings?.lookup?.maxContextChars || 700;
     const startEl = info.node.nodeType === 1 ? info.node : info.node.parentElement;
+    const para = startEl?.closest?.('.rd-para');
+    if (para) return pickContext(para.textContent, info.text, maxChars);
     const span = startEl?.closest?.('.textLayer > span') || startEl;
     const lineText = collectLineText(span);
     if (lineText && lineText.length > info.text.length) {
@@ -596,7 +624,7 @@ function bindSelection() {
 
   ui.viewport.addEventListener('dblclick', (e) => {
     if (state.settings?.lookup?.doubleClick === false) return;
-    if (e.target.closest?.('.page') == null) return;
+    if (e.target.closest?.('.page, .rd-para') == null) return;
     guard = Date.now();
     setTimeout(() => {
       const info = readSelection();
@@ -731,6 +759,10 @@ function bindToolbar() {
     if (e.key === 'Enter') runSearch();
   });
   el('btn-translate-page').addEventListener('click', translateCurrentPage);
+  el('btn-reader').addEventListener('click', () => {
+    if (!state.doc) return toast('เปิดไฟล์ PDF ก่อน แล้วค่อยเข้าโหมดอ่าน');
+    state.reader.toggle();
+  });
   el('trans-close').addEventListener('click', async () => {
     ui.transPanel.hidden = true;
     await refitIfAuto();

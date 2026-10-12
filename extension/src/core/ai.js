@@ -82,16 +82,23 @@ export async function aiAnalyze({
     { role: 'user', content: buildUserPrompt({ query, context, baseTranslation, mode }) },
   ];
 
+  const text = await callAi({ provider, baseUrl, model, apiKey: cfg.apiKey, messages, temperature, maxTokens, timeoutMs, signal });
+  const parsed = parseJsonLoose(text);
+  return normalizeAiResult(parsed, { provider, model });
+}
+
+/** ส่ง messages ไปยังผู้ให้บริการที่เลือก แล้วคืนข้อความดิบ */
+async function callAi({ provider, baseUrl, model, apiKey, messages, temperature, maxTokens, timeoutMs, signal }) {
   let text = '';
   if (provider === 'gemini') {
-    text = await callGemini({ baseUrl, model, apiKey: cfg.apiKey, messages, temperature, maxTokens, timeoutMs, signal });
+    text = await callGemini({ baseUrl, model, apiKey, messages, temperature, maxTokens, timeoutMs, signal });
   } else if (provider === 'anthropic') {
-    text = await callAnthropic({ baseUrl, model, apiKey: cfg.apiKey, messages, temperature, maxTokens, timeoutMs, signal });
+    text = await callAnthropic({ baseUrl, model, apiKey, messages, temperature, maxTokens, timeoutMs, signal });
   } else {
     text = await callOpenAiCompatible({
       baseUrl,
       model,
-      apiKey: cfg.apiKey,
+      apiKey,
       messages,
       temperature,
       maxTokens,
@@ -100,9 +107,67 @@ export async function aiAnalyze({
       jsonMode: provider !== 'ollama',
     });
   }
+  return text;
+}
 
-  const parsed = parseJsonLoose(text);
-  return normalizeAiResult(parsed, { provider, model });
+/**
+ * สรุปเนื้อหาที่กำลังอ่านเป็นภาษาไทย + คำถามเช็กความเข้าใจ (ใช้ในโหมดอ่าน)
+ * @returns {Promise<{summary:string[], quiz:Array<{question:string, choices:string[], answer:number, explain:string}>, provider:string, model:string}>}
+ */
+export async function aiDigest({ settings, text, signal = null }) {
+  const cfg = settings?.ai || {};
+  const provider = cfg.provider || 'openai';
+  const meta = AI_PROVIDERS[provider] || AI_PROVIDERS.openai;
+  const model = cfg.model || meta.defaultModel;
+  const baseUrl = (cfg.baseUrl || meta.defaultBase).replace(/\/+$/, '');
+  const messages = [
+    {
+      role: 'system',
+      content: [
+        'You help a THAI learner understand an English passage they are reading.',
+        'Reply with ONE valid JSON object only. No markdown, no code fences.',
+        'Write all Thai in natural everyday Thai. Base everything ONLY on the passage — never add outside facts.',
+        'Shape: {"summary": ["3-5 short Thai bullet points covering the main ideas in order"],',
+        ' "quiz": [{"question": "Thai question that checks understanding of the passage (not vocabulary trivia)",',
+        '   "choices": ["4 short Thai choices"], "answer": 0, "explain": "one Thai sentence: why, quoting the key English phrase"}]}',
+        'Give exactly 3 quiz questions. "answer" is the 0-based index of the correct choice. Vary the position of the correct answer.',
+      ].join('\n'),
+    },
+    { role: 'user', content: `ข้อความที่กำลังอ่าน:\n"""${truncate(String(text || ''), 6000)}"""` },
+  ];
+  const raw = await callAi({
+    provider,
+    baseUrl,
+    model,
+    apiKey: cfg.apiKey,
+    messages,
+    temperature: 0.2,
+    maxTokens: Math.max(cfg.maxTokens || 0, 1800),
+    timeoutMs: Math.max(cfg.timeoutMs || 0, 45000),
+    signal,
+  });
+  return { ...normalizeDigest(parseJsonLoose(raw)), provider: `ai:${provider}`, model };
+}
+
+/** กันโครงสร้างผิด/ฟิลด์หาย จาก AI — คำถามที่ใช้ไม่ได้จะถูกตัดทิ้ง */
+export function normalizeDigest(raw) {
+  const r = raw && typeof raw === 'object' ? raw : {};
+  const summary = toArray(r.summary || r.bullets || r.keyPoints)
+    .map((s) => (typeof s === 'string' ? s : str(s?.text || s?.point)))
+    .map(str)
+    .filter(Boolean)
+    .slice(0, 8);
+  const quiz = toArray(r.quiz || r.questions)
+    .map((q) => {
+      const choices = toArray(q?.choices || q?.options).map((c) => (typeof c === 'string' ? str(c) : str(c?.text))).filter(Boolean);
+      let answer = q?.answer ?? q?.correct ?? q?.answerIndex;
+      if (typeof answer === 'string' && /^[A-Da-d]$/.test(answer.trim())) answer = answer.trim().toUpperCase().charCodeAt(0) - 65;
+      answer = Number(answer);
+      return { question: str(q?.question || q?.q), choices, answer, explain: str(q?.explain || q?.explanation) };
+    })
+    .filter((q) => q.question && q.choices.length >= 2 && Number.isInteger(q.answer) && q.answer >= 0 && q.answer < q.choices.length)
+    .slice(0, 5);
+  return { summary, quiz };
 }
 
 /** ทดสอบการเชื่อมต่อ AI ด้วยคำถามสั้น ๆ */

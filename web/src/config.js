@@ -5,7 +5,7 @@
 globalThis.__ATTHAI_CONFIG__ = {
   env: 'web',
   version: "1.0.0",
-  builtAt: "2026-10-12T07:22:12.549Z",
+  builtAt: "2026-10-12T07:40:18.140Z",
   pdfWorkerUrl: '../../vendor/pdfjs/pdf.worker.min.js',
   cMapUrl: '../../vendor/pdfjs/cmaps/',
   standardFontDataUrl: '../../vendor/pdfjs/standard_fonts/',

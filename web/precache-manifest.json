@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
-  "builtAt": "2026-10-12T07:22:18.685Z",
-  "count": 51,
+  "builtAt": "2026-10-12T07:40:23.410Z",
+  "count": 53,
   "files": [
     "icons/apple-touch-icon.png",
     "icons/favicon.png",
@@ -51,6 +51,8 @@
     "src/ui/fonts/sarabun-thai-800.woff2",
     "src/ui/fonts/sarabun.css",
     "src/ui/pages.css",
+    "src/viewer/paragraphs.js",
+    "src/viewer/reader.js",
     "src/viewer/viewer.css",
     "src/viewer/viewer.html",
     "src/viewer/viewer.js"

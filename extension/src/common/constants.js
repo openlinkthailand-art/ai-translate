@@ -32,6 +32,7 @@ export const MSG = {
   CLEAR_CACHE: 'clearCache',
   PDF_REDIRECT: 'pdfRedirect',
   GET_PAGE_INFO: 'getPageInfo',
+  AI_DIGEST: 'aiDigest',
 };
 
 export const DEFAULT_SETTINGS = {
@@ -88,6 +89,16 @@ export const DEFAULT_SETTINGS = {
     skipHosts: [],
     defaultZoom: 'page-width',
     rememberPosition: true,
+  },
+  /** โหมดอ่าน (ข้อความไหลตามจอ) ในตัวอ่าน PDF */
+  reader: {
+    active: false,
+    fontSize: 18,
+    lineHeight: 1.8,
+    width: 'medium',
+    ruler: false,
+    bilingual: false,
+    highlightSaved: true,
   },
   library: {
     autoSave: false,

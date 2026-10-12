@@ -1,13 +1,13 @@
 {
   "version": "1.0.0",
-  "builtAt": "2026-10-12T07:22:18.982Z",
-  "copied": 228,
+  "builtAt": "2026-10-12T07:40:23.877Z",
+  "copied": 230,
   "files": {
     "common/constants.js": {
-      "src": "0548e950fff7",
-      "expected": "0548e950fff7",
+      "src": "46c6baf31f00",
+      "expected": "46c6baf31f00",
       "transform": "",
-      "copy": "0548e950fff7"
+      "copy": "46c6baf31f00"
     },
     "common/platform.js": {
       "src": "de4dcc14955f",
@@ -28,10 +28,10 @@
       "copy": "bad271f13252"
     },
     "core/ai.js": {
-      "src": "b3adab49cbe3",
-      "expected": "b3adab49cbe3",
+      "src": "48990cfd0161",
+      "expected": "48990cfd0161",
       "transform": "",
-      "copy": "b3adab49cbe3"
+      "copy": "48990cfd0161"
     },
     "core/cache.js": {
       "src": "746552b61b94",
@@ -58,10 +58,10 @@
       "copy": "c38ae4e5911d"
     },
     "core/router.js": {
-      "src": "1b08b2cc43d8",
-      "expected": "1b08b2cc43d8",
+      "src": "d5cb820d7f7f",
+      "expected": "d5cb820d7f7f",
       "transform": "",
-      "copy": "1b08b2cc43d8"
+      "copy": "d5cb820d7f7f"
     },
     "core/translate-service.js": {
       "src": "3d328e1268dc",
@@ -189,23 +189,35 @@
       "transform": "",
       "copy": "9af7dd0ee815"
     },
-    "viewer/viewer.css": {
-      "src": "e6905191b527",
-      "expected": "e6905191b527",
+    "viewer/paragraphs.js": {
+      "src": "e096f5d213c1",
+      "expected": "e096f5d213c1",
       "transform": "",
-      "copy": "e6905191b527"
+      "copy": "e096f5d213c1"
+    },
+    "viewer/reader.js": {
+      "src": "0a5b4d5fb7b3",
+      "expected": "0a5b4d5fb7b3",
+      "transform": "",
+      "copy": "0a5b4d5fb7b3"
+    },
+    "viewer/viewer.css": {
+      "src": "4c57ce5be0ad",
+      "expected": "4c57ce5be0ad",
+      "transform": "",
+      "copy": "4c57ce5be0ad"
     },
     "viewer/viewer.html": {
-      "src": "203a4888757c",
-      "expected": "a688d6a7a207",
+      "src": "493546bfbfcc",
+      "expected": "77db7b0e16a2",
       "transform": "inject-icons-v1",
-      "copy": "a688d6a7a207"
+      "copy": "77db7b0e16a2"
     },
     "viewer/viewer.js": {
-      "src": "14740faa4c3b",
-      "expected": "14740faa4c3b",
+      "src": "f2d46ccad31d",
+      "expected": "f2d46ccad31d",
       "transform": "",
-      "copy": "14740faa4c3b"
+      "copy": "f2d46ccad31d"
     },
     "library/library.html": {
       "src": "208a077251cb",
